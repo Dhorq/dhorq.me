@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import useGlobalStore from "../stores/useGlobalStore";
 
 import { Lightbulb, LightbulbOff } from "lucide-react";
@@ -15,14 +16,15 @@ const Navbar = () => {
 
   return (
     <ul className="flex gap-5 justify-center items-center">
-      <li
+      <Link
+        to="/about"
         className={`${
           selectedNavbar === "about" ? "underline" : ""
         } cursor-pointer hover:opacity-75`}
         onClick={() => setSelectedNavbar("about")}
       >
         About
-      </li>
+      </Link>
       <li
         className={`${
           selectedNavbar === "projects" ? "underline" : ""
