@@ -9,8 +9,10 @@ const ProjectCard = () => {
       {projects.map((project) => (
         <div
           key={project.title}
-          className={`shadow-md w-60 h-90 justify-start flex flex-col ${
-            !darkMode ? "bg-amber-50 text-black" : "bg-gray-800 text-white"
+          className={`w-60 h-90 justify-start flex flex-col ${
+            !darkMode
+              ? "bg-amber-50 text-black shadow-md"
+              : "bg-stone-900 shadow-[2px_2px_6px_rgba(255,255,255,0.3)] text-white"
           }`}
         >
           <img
