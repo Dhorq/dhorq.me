@@ -8,16 +8,53 @@ const Navbar = () => {
   //   toggleDarkMode: state.toggleDarkMode,
   // }));
 
+  const { selectedNavbar, setSelectedNavbar } = useGlobalStore();
+
   const darkMode = useGlobalStore((state) => state.darkMode);
   const toggleDarkMode = useGlobalStore((state) => state.toggleDarkMode);
 
   return (
     <ul className="flex gap-5 justify-center items-center">
-      <li>About</li>
-      <li>Projects</li>
-      <li>Experiences</li>
-      <li>Educations</li>
-      <li>Contacts</li>
+      <li
+        className={`${
+          selectedNavbar === "about" ? "underline" : ""
+        } cursor-pointer hover:opacity-75`}
+        onClick={() => setSelectedNavbar("about")}
+      >
+        About
+      </li>
+      <li
+        className={`${
+          selectedNavbar === "projects" ? "underline" : ""
+        } cursor-pointer hover:opacity-75`}
+        onClick={() => setSelectedNavbar("projects")}
+      >
+        Projects
+      </li>
+      <li
+        className={`${
+          selectedNavbar === "experiences" ? "underline" : ""
+        } cursor-pointer hover:opacity-75`}
+        onClick={() => setSelectedNavbar("experiences")}
+      >
+        Experiences
+      </li>
+      <li
+        className={`${
+          selectedNavbar === "educations" ? "underline" : ""
+        } cursor-pointer hover:opacity-75`}
+        onClick={() => setSelectedNavbar("educations")}
+      >
+        Educations
+      </li>
+      <li
+        className={`${
+          selectedNavbar === "contacts" ? "underline" : ""
+        } cursor-pointer hover:opacity-75`}
+        onClick={() => setSelectedNavbar("contacts")}
+      >
+        Contacts
+      </li>
       {!darkMode ? (
         <LightbulbOff
           onClick={toggleDarkMode}
