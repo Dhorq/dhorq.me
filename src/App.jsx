@@ -2,6 +2,7 @@ import { Navigate, Route, Routes } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import About from "./pages/About";
 import useGlobalStore from "./stores/useGlobalStore";
+import Projects from "./pages/Projects";
 
 const App = () => {
   const darkMode = useGlobalStore((state) => state.darkMode);
@@ -16,6 +17,10 @@ const App = () => {
       <Routes>
         <Route path="/" element={<Navigate to="/about" replace />} />
         <Route path="/about" element={<About />} />
+        <Route path="/projects" element={<Projects />} />
+        <Route path="/experiences" element={<About />} />
+        <Route path="/educations" element={<About />} />
+        <Route path="/contacts" element={<About />} />
       </Routes>
     </div>
   );

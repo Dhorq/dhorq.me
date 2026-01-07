@@ -25,14 +25,15 @@ const Navbar = () => {
       >
         About
       </Link>
-      <li
+      <Link
+        to="/projects"
         className={`${
           selectedNavbar === "projects" ? "underline" : ""
         } cursor-pointer hover:opacity-75`}
         onClick={() => setSelectedNavbar("projects")}
       >
         Projects
-      </li>
+      </Link>
       <li
         className={`${
           selectedNavbar === "experiences" ? "underline" : ""
