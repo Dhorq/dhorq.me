@@ -14,18 +14,20 @@ const App = () => {
     <div
       className={`${
         darkMode ? "bg-black text-white" : "bg-white text-black"
-      } p-10 min-h-screen gap-15 flex flex-col`}
+      } p-10 flex flex-col`}
     >
-      <Navbar />
-      <Routes>
-        <Route path="/" element={<Home />} />
+      <div className="min-h-screen gap-15 flex flex-col">
+        <Navbar />
+        <Routes>
+          <Route path="/" element={<Home />} />
 
-        <Route path="/about" element={<About />} />
-        <Route path="/projects" element={<Projects />} />
-        <Route path="/experiences" element={<About />} />
-        <Route path="/educations" element={<About />} />
-        <Route path="/contact" element={<Contact />} />
-      </Routes>
+          <Route path="/about" element={<About />} />
+          <Route path="/projects" element={<Projects />} />
+          <Route path="/experiences" element={<About />} />
+          <Route path="/educations" element={<About />} />
+          <Route path="/contact" element={<Contact />} />
+        </Routes>
+      </div>
       <Footer />
     </div>
   );
