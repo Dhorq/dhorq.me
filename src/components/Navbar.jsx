@@ -50,14 +50,15 @@ const Navbar = () => {
       >
         Educations
       </li> */}
-      <li
+      <Link
+        to="/contact"
         className={`${
           selectedNavbar === "contacts" ? "underline" : ""
         } cursor-pointer hover:opacity-75`}
-        onClick={() => setSelectedNavbar("contacts")}
+        onClick={() => setSelectedNavbar("contact")}
       >
-        Contacts
-      </li>
+        Contact
+      </Link>
       {!darkMode ? (
         <LightbulbOff
           onClick={toggleDarkMode}
