@@ -6,6 +6,12 @@ import express from "../assets/express.png";
 import mongodb from "../assets/mongodb.png";
 import nodejs from "../assets/nodejs.png";
 import zustand from "../assets/zustand.png";
+import python from "../assets/python.png";
+import minio from "../assets/minio.png";
+import postgresql from "../assets/postgresql.png";
+import metabase from "../assets/metabase.png";
+import docker from "../assets/docker.png";
+import threejs from "../assets/three_js.png";
 
 import tableau from "../assets/tableau.png";
 
@@ -61,7 +67,7 @@ export const projects = [
   },
   {
     title: "Product Store PERN Stack",
-    tech: ["React", "Tailwind"],
+    tech: [html, tailwind, react, nodejs, express, zustand],
     link: "https://github.com/Dhorq/pern-product-store",
     description: "Simple CRUD product store PERN stack",
     tutorial: true,
@@ -69,7 +75,7 @@ export const projects = [
   },
   {
     title: "Product Store MERN Stack",
-    tech: ["React", "Tailwind"],
+    tech: [html, tailwind, react, nodejs, express, zustand],
     link: "https://github.com/Dhorq/mern-product-store",
     description: "Simple CRUD product store MERN stack",
     tutorial: true,
@@ -77,7 +83,7 @@ export const projects = [
   },
   {
     title: "Packing List",
-    tech: ["React", "Tailwind"],
+    tech: [html, css, react],
     link: "https://github.com/Dhorq/packing-list",
     description:
       "Packing list frontend only application. Created to practice React.js skill",
@@ -86,7 +92,7 @@ export const projects = [
   },
   {
     title: "Portfolio Website V3",
-    tech: ["React", "Tailwind"],
+    tech: [html, tailwind, react, threejs],
     link: "https://github.com/Dhorq/3d-pf",
     description: "Portfolio website V3",
     tutorial: false,
@@ -94,7 +100,7 @@ export const projects = [
   },
   {
     title: "Portfolio Website V2",
-    tech: ["React", "Tailwind"],
+    tech: [html, tailwind, react],
     link: "https://github.com/Dhorq/new-pf-tailwind",
     description: "Portfolio website V2",
     tutorial: false,
@@ -102,7 +108,7 @@ export const projects = [
   },
   {
     title: "Portfolio Website V1",
-    tech: ["React", "Tailwind"],
+    tech: [html, css, react],
     link: "https://github.com/Dhorq/pf",
     description: "Portfolio website V1",
     tutorial: true,
@@ -110,7 +116,7 @@ export const projects = [
   },
   {
     title: "Dahlia Family House",
-    tech: ["React", "Tailwind"],
+    tech: [html, css, react],
     link: "https://github.com/Dhorq/dfh",
     description: "Frontend only villa responsive website",
     tutorial: true,
@@ -118,7 +124,7 @@ export const projects = [
   },
   {
     title: "Stock Market ETL Pipeline",
-    tech: ["React", "Tailwind"],
+    tech: [python, airflow, minio, postgresql, metabase],
     link: "https://github.com/Dhorq/stock-market-pipeline",
     description: "Stock market ETL pipeline",
     tutorial: true,
@@ -126,7 +132,7 @@ export const projects = [
   },
   {
     title: "APOD NASA ETL Pipeline",
-    tech: ["React", "Tailwind"],
+    tech: [python, airflow, postgresql, docker],
     link: "https://github.com/Dhorq/apod-nasa-etl-pipeline",
     description: "APOD NASA ETL pipeline",
     tutorial: true,

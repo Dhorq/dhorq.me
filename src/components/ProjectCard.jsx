@@ -13,7 +13,7 @@ const ProjectCard = () => {
           target="_blank"
           rel="noopener"
           key={project.title}
-          className={`w-70 lg:w-60 h-90 justify-start flex flex-col relative hover:-translate-y-1 ${
+          className={`w-80 lg:w-65 h-90 justify-start flex flex-col relative hover:-translate-y-1 ${
             !darkMode
               ? "bg-amber-50 text-black shadow-md"
               : "bg-stone-900 shadow-[2px_2px_6px_rgba(255,255,255,0.3)] text-white"
