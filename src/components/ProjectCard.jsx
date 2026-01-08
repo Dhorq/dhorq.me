@@ -6,14 +6,14 @@ const ProjectCard = () => {
   const { darkMode } = useGlobalStore();
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
+    <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-10">
       {projects.map((project) => (
         <a
           href={project.link}
           target="_blank"
           rel="noopener"
           key={project.title}
-          className={`w-70 lg:w-65 h-90 justify-start flex flex-col relative hover:-translate-y-1 ${
+          className={`w-65 md:w-75 lg:w-85 h-90 justify-start flex flex-col relative hover:-translate-y-1 ${
             !darkMode
               ? "bg-amber-50 text-black shadow-md"
               : "bg-stone-900 shadow-[2px_2px_6px_rgba(255,255,255,0.3)] text-white"
