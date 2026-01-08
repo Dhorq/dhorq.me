@@ -23,7 +23,7 @@ export const projects = [
   {
     title: "User Authentication MERN Stack",
     tech: [html, tailwind, react, nodejs, express, mongodb],
-    link: "github.com",
+    link: "https://github.com/",
     description:
       "Website to practice authentication backend by creating register, login, logout, and middleware for user",
     tutorial: false,
