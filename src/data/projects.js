@@ -28,6 +28,7 @@ import mern_product_store_self from "../assets/img/mern_product_store_self.png";
 import netflix from "../assets/img/netflix.png";
 import pern_product_store from "../assets/img/pern_product-store.png";
 import mern_product_store from "../assets/img/mern_product_store.png";
+import sticky_wall from "../assets/img/sticky_wall.png";
 
 import airflow from "../assets/airflow.png";
 
@@ -48,6 +49,7 @@ export const projects = [
     description:
       "Website to practice MERN stack and I decided to create sticky wall / sticky notes look alike with pagination",
     tutorial: false,
+    image: sticky_wall,
   },
   {
     title: "List Store MERN Stack",
