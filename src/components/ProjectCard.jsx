@@ -6,11 +6,11 @@ const ProjectCard = () => {
   const { darkMode } = useGlobalStore();
 
   return (
-    <div className="grid grid-cols-3 gap-10">
+    <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
       {projects.map((project) => (
         <div
           key={project.title}
-          className={`w-60 h-90 justify-start flex flex-col relative ${
+          className={`w-70 lg:w-60 h-90 justify-start flex flex-col relative ${
             !darkMode
               ? "bg-amber-50 text-black shadow-md"
               : "bg-stone-900 shadow-[2px_2px_6px_rgba(255,255,255,0.3)] text-white"
