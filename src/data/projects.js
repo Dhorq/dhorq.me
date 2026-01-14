@@ -12,6 +12,8 @@ import postgresql from "../assets/postgresql.png";
 import metabase from "../assets/metabase.png";
 import docker from "../assets/docker.png";
 import threejs from "../assets/three_js.png";
+import nextjs from "../assets/nextjs.png";
+import prisma from "../assets/prisma.png";
 
 import tableau from "../assets/tableau.png";
 
@@ -33,6 +35,14 @@ import sticky_wall from "../assets/img/sticky_wall.png";
 import airflow from "../assets/airflow.png";
 
 export const projects = [
+  {
+    title: "Inventory Management",
+    tech: [html, tailwind, react, nextjs, prisma],
+    link: "https://github.com/Dhorq/",
+    description:
+      "Inventory management website built on Next.js. Intended to improve my Next.js skill.",
+    tutorial: false,
+  },
   {
     title: "User Authentication MERN Stack",
     tech: [html, tailwind, react, nodejs, express, mongodb],
