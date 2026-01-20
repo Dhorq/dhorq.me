@@ -8,7 +8,7 @@ const Contact = () => {
   return (
     <div className="flex flex-col gap-10 items-center justify-cener">
       <h2 className="text-3xl font-black">Contact</h2>
-      <ul className="flex flex-col gap-7">
+      <ul className="flex flex-col gap-7 h-[65vh]">
         <li className="flex gap-2 justify-start items-center">
           <img src={gmail} alt="Gmail" className="size-6" />
           <a
@@ -58,7 +58,11 @@ const Contact = () => {
           </a>
         </li>
         <li className="flex gap-2 justify-start items-center">
-          <img src={leetcode} alt="Leetcode" className="size-6 rounded-md" />
+          <img
+            src={leetcode}
+            alt="Leetcode"
+            className="size-6 rounded-md brightness-75"
+          />
           <a
             href="https://leetcode.com/u/8E5rUjdvno/"
             target="_blank"

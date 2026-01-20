@@ -2,7 +2,7 @@ const About = () => {
   return (
     <div className="flex justify-center items-center flex-col gap-10">
       <h1 className="text-2xl lg:text-3xl font-black">Ridho Rifqy Muhammad</h1>
-      <div className="flex text-justify flex-col gap-5 w-80 md:w-145 lg:w-190">
+      <div className="flex text-justify flex-col gap-5 w-80 md:w-145 lg:w-150">
         <p className="leading-8">
           I am a recent Computer Science graduate from Bina Nusantara University
           and full-stack JavaScript developer with experience building
