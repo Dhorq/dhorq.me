@@ -14,7 +14,7 @@ const App = () => {
     <div
       className={`${
         darkMode ? "bg-black text-white" : "bg-white text-black"
-      } p-10 flex flex-col`}
+      } pb-5 md:p-10 flex flex-col`}
     >
       <div className="min-h-screen gap-15 flex flex-col">
         <Navbar />

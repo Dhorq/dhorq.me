@@ -2,6 +2,7 @@ import gmail from "../assets/gmail.png";
 import linkedin from "../assets/linkedin.png";
 import whatsapp from "../assets/whatsapp.png";
 import github from "../assets/github.png";
+import leetcode from "../assets/leetcode.png";
 
 const Contact = () => {
   return (
@@ -49,6 +50,17 @@ const Contact = () => {
           />
           <a
             href="https://github.com/Dhorq"
+            target="_blank"
+            rel="noreferrer"
+            className="underline font-sans italic"
+          >
+            Dhorq
+          </a>
+        </li>
+        <li className="flex gap-2 justify-start items-center">
+          <img src={leetcode} alt="Leetcode" className="size-6 rounded-md" />
+          <a
+            href="https://leetcode.com/u/8E5rUjdvno/"
             target="_blank"
             rel="noreferrer"
             className="underline font-sans italic"
