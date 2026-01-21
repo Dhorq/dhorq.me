@@ -7,7 +7,7 @@ import leetcode from "../assets/leetcode.png";
 const Contact = () => {
   return (
     <div className="flex flex-col gap-10 items-center justify-cener">
-      <h2 className="text-3xl font-black">Contact</h2>
+      <h2 className="text-2xl lg:text-3xl font-black">Contacts</h2>
       <ul className="flex flex-col gap-7 h-[65vh]">
         <li className="flex gap-2 justify-start items-center">
           <img src={gmail} alt="Gmail" className="size-6" />

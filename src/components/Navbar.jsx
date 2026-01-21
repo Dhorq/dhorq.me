@@ -58,7 +58,7 @@ const Navbar = () => {
           } cursor-pointer hover:opacity-75`}
           onClick={() => setSelectedNavbar("contact")}
         >
-          Contact
+          Contacts
         </Link>
         {!darkMode ? (
           <LightbulbOff

@@ -15,6 +15,7 @@ import threejs from "../assets/three_js.png";
 import nextjs from "../assets/nextjs.png";
 import prisma from "../assets/prisma.png";
 
+import airflow from "../assets/airflow.png";
 import tableau from "../assets/tableau.png";
 
 import dahlia_family_house from "../assets/img/dahlia_family_house.png";
@@ -31,10 +32,18 @@ import netflix from "../assets/img/netflix.png";
 import pern_product_store from "../assets/img/pern_product-store.png";
 import mern_product_store from "../assets/img/mern_product_store.png";
 import sticky_wall from "../assets/img/sticky_wall.png";
-
-import airflow from "../assets/airflow.png";
+import simple_portfolio from "../assets/img/simple-portfolio.png";
 
 export const projects = [
+  {
+    title: "Simple Portfolio",
+    tech: [html, tailwind, react],
+    link: "https://github.com/Dhorq/simple-portfolio",
+    description:
+      "Simple portfolio website built only using React.js and TailwindCSS as tech stacks.",
+    tutorial: false,
+    image: simple_portfolio,
+  },
   {
     title: "Inventory Management",
     tech: [html, tailwind, react, nextjs, prisma],
