@@ -13,16 +13,16 @@ const ProjectCard = () => {
           target="_blank"
           rel="noopener"
           key={project.title}
-          className={`w-80 lg:w-85 h-90 justify-start flex flex-col relative hover:-translate-y-1 ${
+          className={`w-80 lg:w-85 h-90 justify-start flex flex-col relative rounded-2xl hover:-translate-y-1 hover:opacity-80 hover:scale-105 transition-all ease-in-out duration-300 ${
             !darkMode
-              ? "bg-amber-50 text-black shadow-md"
+              ? "bg-amber-100 text-black shadow-md"
               : "bg-stone-900 shadow-[2px_2px_6px_rgba(255,255,255,0.3)] text-white"
           }`}
         >
           <img
             src={project.image}
             alt="Image"
-            className="min-h-40 max-h-40 w-full object-cover"
+            className="min-h-40 max-h-40 w-full object-cover rounded-t-2xl"
           />
           <div className="grid grid-rows-6 content-between h-full p-2 text-sm">
             <p className="row-span-1 font-medium">{project.title}</p>

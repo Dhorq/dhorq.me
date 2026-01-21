@@ -16,12 +16,12 @@ const Navbar = () => {
 
   return (
     <div className="flex justify-center items-center">
-      <ul className="hidden md:flex gap-5 justify-center items-center">
+      <ul className="hidden md:flex gap-6 justify-center items-center">
         <Link
           to="/about"
           className={`${
-            selectedNavbar === "about" ? "underline" : ""
-          } cursor-pointer hover:opacity-75`}
+            selectedNavbar === "about" ? "border-b" : ""
+          } cursor-pointer hover:font-bold hover:scale-105 transition-all ease-in duration-300`}
           onClick={() => setSelectedNavbar("about")}
         >
           About
@@ -29,8 +29,8 @@ const Navbar = () => {
         <Link
           to="/projects"
           className={`${
-            selectedNavbar === "projects" ? "underline" : ""
-          } cursor-pointer hover:opacity-75`}
+            selectedNavbar === "projects" ? "border-b" : ""
+          } cursor-pointer hover:font-bold hover:scale-105 transition-all ease-in-out duration-300`}
           onClick={() => setSelectedNavbar("projects")}
         >
           Projects
@@ -54,8 +54,8 @@ const Navbar = () => {
         <Link
           to="/contact"
           className={`${
-            selectedNavbar === "contact" ? "underline" : ""
-          } cursor-pointer hover:opacity-75`}
+            selectedNavbar === "contact" ? "border-b" : ""
+          } cursor-pointer hover:font-bold hover:scale-105 transition-all ease-in-out duration-300`}
           onClick={() => setSelectedNavbar("contact")}
         >
           Contacts

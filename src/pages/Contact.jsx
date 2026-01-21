@@ -15,7 +15,7 @@ const Contact = () => {
             href="mailto:example@gmail.com"
             target="_blank"
             rel="noreferrer"
-            className="underline font-sans italic"
+            className="underline font-sans italic hover:opacity-75"
           >
             ridhorifqy34@gmail.com
           </a>
@@ -26,7 +26,7 @@ const Contact = () => {
             href="https://wa.me/6281384752978"
             target="_blank"
             rel="noreferrer"
-            className="underline font-sans italic"
+            className="underline font-sans italic hover:opacity-75"
           >
             WhatsApp
           </a>
@@ -37,7 +37,7 @@ const Contact = () => {
             href="https://www.linkedin.com/in/ridhorifqymuhammad/"
             target="_blank"
             rel="noreferrer"
-            className="underline font-sans italic"
+            className="underline font-sans italic hover:opacity-75"
           >
             Ridho Rifqy Muhammad
           </a>
@@ -52,7 +52,7 @@ const Contact = () => {
             href="https://github.com/Dhorq"
             target="_blank"
             rel="noreferrer"
-            className="underline font-sans italic"
+            className="underline font-sans italic hover:opacity-75"
           >
             Dhorq
           </a>
@@ -67,7 +67,7 @@ const Contact = () => {
             href="https://leetcode.com/u/8E5rUjdvno/"
             target="_blank"
             rel="noreferrer"
-            className="underline font-sans italic"
+            className="underline font-sans italic hover:opacity-75"
           >
             Dhorq
           </a>
