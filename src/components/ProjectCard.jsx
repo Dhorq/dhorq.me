@@ -38,13 +38,13 @@ const ProjectCard = () => {
               ))}
             </ul>
           </div>
-          {project.tutorial ? (
+          {/* {project.tutorial ? (
             <div className="absolute right-1 top-1 z-100">
               <Presentation className="size-5 text-green-500" />
             </div>
           ) : (
             ""
-          )}
+          )} */}
         </a>
       ))}
     </div>
