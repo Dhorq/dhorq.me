@@ -33,14 +33,24 @@ import pern_product_store from "../assets/img/pern_product-store.png";
 import mern_product_store from "../assets/img/mern_product_store.png";
 import sticky_wall from "../assets/img/sticky_wall.png";
 import simple_portfolio from "../assets/img/simple-portfolio.png";
+import taskez from "../assets/img/taskez.png";
 
 export const projects = [
+  {
+    title: "Taskez",
+    tech: [html, tailwind, react, express, postgresql, prisma],
+    link: "https://github.com/Dhorq/taskez",
+    description:
+      "Full-stack task management application built with the PERN (PostgreSQL, Express, React, Node.js) stack using TypeScript and Prisma ORM, featuring robust input validation with Zod and production-grade logging with Winston to ensure reliability, maintainability, and scalability",
+    tutorial: false,
+    image: taskez,
+  },
   {
     title: "Simple Portfolio",
     tech: [html, tailwind, react],
     link: "https://github.com/Dhorq/simple-portfolio",
     description:
-      "Simple portfolio website built only using React.js and TailwindCSS as tech stacks.",
+      "Simple portfolio website built with React.js and Tailwind CSS, focusing on clean design and responsive user experience",
     tutorial: false,
     image: simple_portfolio,
   },
@@ -49,7 +59,7 @@ export const projects = [
     tech: [html, tailwind, react, nextjs, prisma],
     link: "https://github.com/Dhorq/",
     description:
-      "Inventory management website built on Next.js. Intended to improve my Next.js skill.",
+      "Next.js-based inventory management website created to strengthen practical experience with the framework",
     tutorial: false,
   },
   {
@@ -57,7 +67,7 @@ export const projects = [
     tech: [html, tailwind, react, nodejs, express, mongodb],
     link: "https://github.com/Dhorq/log-authentication-1",
     description:
-      "Website to practice authentication backend by creating register, login, logout, and middleware for user",
+      "Practice project focused on backend authentication, featuring user registration, login, logout, and middleware handling",
     tutorial: false,
     image: log_authentication,
   },
@@ -66,7 +76,7 @@ export const projects = [
     tech: [html, tailwind, react, nodejs, express, mongodb],
     link: "https://github.com/Dhorq/sticky-wall",
     description:
-      "Website to practice MERN stack and I decided to create sticky wall / sticky notes look alike with pagination",
+      "MERN stack project developed to practice full-stack development, featuring a sticky notes-style interface with pagination",
     tutorial: false,
     image: sticky_wall,
   },
@@ -74,7 +84,8 @@ export const projects = [
     title: "List Store MERN Stack",
     tech: [html, tailwind, react, nodejs, express, mongodb],
     link: "github.com",
-    description: "Simple CRUD MERN website to store a list",
+    description:
+      "MERN stack application implementing basic CRUD operations to manage and store a list",
     tutorial: false,
     image: mern_product_store_self,
   },
@@ -82,7 +93,8 @@ export const projects = [
     title: "Netflix Clone",
     tech: [html, tailwind, react, nodejs, express, mongodb, zustand],
     link: "https://github.com/Dhorq/netflix-alike",
-    description: "Full stack Netflix clone in MERN stack",
+    description:
+      "Full-stack Netflix clone developed using the MERN (MongoDB, Express, React, Node.js) stack",
     tutorial: true,
     image: netflix,
   },
@@ -90,7 +102,8 @@ export const projects = [
     title: "Product Store PERN Stack",
     tech: [html, tailwind, react, nodejs, express, zustand],
     link: "https://github.com/Dhorq/pern-product-store",
-    description: "Simple CRUD product store PERN stack",
+    description:
+      "PERN stack application implementing CRUD operations for managing a product store",
     tutorial: true,
     image: pern_product_store,
   },
@@ -98,7 +111,8 @@ export const projects = [
     title: "Product Store MERN Stack",
     tech: [html, tailwind, react, nodejs, express, zustand],
     link: "https://github.com/Dhorq/mern-product-store",
-    description: "Simple CRUD product store MERN stack",
+    description:
+      "MERN stack application implementing CRUD operations for managing a product store",
     tutorial: true,
     image: mern_product_store,
   },
@@ -107,7 +121,7 @@ export const projects = [
     tech: [html, css, react],
     link: "https://github.com/Dhorq/packing-list",
     description:
-      "Packing list frontend only application. Created to practice React.js skill",
+      "React.js frontend project for managing a packing list, created to enhance practical skills with the framework",
     tutorial: false,
     image: packing_list,
   },
@@ -139,7 +153,8 @@ export const projects = [
     title: "Dahlia Family House",
     tech: [html, css, react],
     link: "https://github.com/Dhorq/dfh",
-    description: "Frontend only villa responsive website",
+    description:
+      "React.js frontend project featuring a responsive villa website design",
     tutorial: true,
     image: dahlia_family_house,
   },
@@ -171,7 +186,7 @@ export const projects = [
     title: "Double Degree",
     tech: [html, css],
     link: "https://drive.google.com/file/d/1R7pCPNUDA-VQv-j9ig8ELkLor4cKBYg2/view?usp=sharing",
-    description: "Website for my thesis built in HTML CSS Javascript",
+    description: "Website for my thesis, developed using HTML CSS Javascript",
     tutorial: false,
     image: double_degree,
   },
@@ -179,7 +194,8 @@ export const projects = [
     title: "Touravel",
     tech: [html, css],
     link: "https://github.com/Dhorq/travel-s",
-    description: "Touravel website to practice HTML and CSS",
+    description:
+      "Touravel website to practice HTML and CSS while doing a study in college",
     tutorial: false,
     image: touravel,
   },

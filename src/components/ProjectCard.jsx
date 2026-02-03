@@ -15,7 +15,7 @@ const ProjectCard = () => {
           key={project.title}
           className={`w-80 lg:w-85 h-90 justify-start flex flex-col relative rounded-2xl hover:-translate-y-1 hover:opacity-80 hover:scale-105 transition-all ease-in-out duration-300 ${
             !darkMode
-              ? "bg-amber-100 text-black shadow-md"
+              ? "bg-white/30 text-black shadow-md"
               : "bg-stone-900 shadow-[2px_2px_6px_rgba(255,255,255,0.3)] text-white"
           }`}
         >

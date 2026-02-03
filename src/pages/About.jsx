@@ -26,7 +26,7 @@ const About = () => {
           roles and continuously learn new technologies to deliver meaningful
           solutions for users.
         </p>
-        <h4 className="font-medium">Academic Experiences</h4>
+        <h4 className="font-bold">Academic Experiences</h4>
         <p className="leading-8 indent-15">
           Since my fifth semester, I have focused on Data Analytics, gaining
           hands-on experience through internships as a System Analyst at the
