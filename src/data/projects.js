@@ -44,7 +44,7 @@ export const projects = [
   {
     title: "User Management App - Next.js",
     tech: [html, tailwind, react, nextjs, postgresql, prisma, better_auth],
-    link: "https://github.com/Dhorq/taskez",
+    link: "https://github.com/Dhorq/user-management-app-next",
     description:
       "User management application with improved authentication, featuring role-based access control and distinct permissions for each role. Built on Next.js.",
     tutorial: false,
@@ -53,7 +53,7 @@ export const projects = [
   {
     title: "User Management App - Nuxt.js",
     tech: [html, tailwind, vue, nuxtjs, postgresql, prisma, better_auth],
-    link: "https://github.com/Dhorq/taskez",
+    link: "https://github.com/Dhorq/user-management-system-nuxt",
     description:
       "User management application with improved authentication, featuring role-based access control and distinct permissions for each role. Built on Nuxt.js.",
     tutorial: false,
