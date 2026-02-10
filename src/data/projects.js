@@ -14,6 +14,9 @@ import docker from "../assets/docker.png";
 import threejs from "../assets/three_js.png";
 import nextjs from "../assets/nextjs.png";
 import prisma from "../assets/prisma.png";
+import vue from "../assets/vue.png";
+import nuxtjs from "../assets/nuxtjs.png";
+import better_auth from "../assets/better_auth.png";
 
 import airflow from "../assets/airflow.png";
 import tableau from "../assets/tableau.png";
@@ -34,8 +37,28 @@ import mern_product_store from "../assets/img/mern_product_store.png";
 import sticky_wall from "../assets/img/sticky_wall.png";
 import simple_portfolio from "../assets/img/simple-portfolio.png";
 import taskez from "../assets/img/taskez.png";
+import user_management_app_next from "../assets/img/user_management_app_next.png";
+import user_management_app_nuxt from "../assets/img/user_management_app_nuxt.png";
 
 export const projects = [
+  {
+    title: "User Management App - Next.js",
+    tech: [html, tailwind, react, nextjs, postgresql, prisma, better_auth],
+    link: "https://github.com/Dhorq/taskez",
+    description:
+      "User management application with improved authentication, featuring role-based access control and distinct permissions for each role. Built on Next.js.",
+    tutorial: false,
+    image: user_management_app_next,
+  },
+  {
+    title: "User Management App - Nuxt.js",
+    tech: [html, tailwind, vue, nuxtjs, postgresql, prisma, better_auth],
+    link: "https://github.com/Dhorq/taskez",
+    description:
+      "User management application with improved authentication, featuring role-based access control and distinct permissions for each role. Built on Nuxt.js.",
+    tutorial: false,
+    image: user_management_app_nuxt,
+  },
   {
     title: "Taskez",
     tech: [html, tailwind, react, express, postgresql, prisma],
