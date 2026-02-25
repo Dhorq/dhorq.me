@@ -39,8 +39,18 @@ import simple_portfolio from "../assets/img/simple-portfolio.png";
 import taskez from "../assets/img/taskez.png";
 import user_management_app_next from "../assets/img/user_management_app_next.png";
 import user_management_app_nuxt from "../assets/img/user_management_app_nuxt.png";
+import sozboost from "../assets/img/sozboost.png";
 
 export const projects = [
+  {
+    title: "SozBoost",
+    tech: [html, tailwind, react, nextjs, postgresql, prisma],
+    link: "https://github.com/Dhorq/sozboost",
+    description:
+      "SozBoost is a creator marketing marketplace connecting brands and content creators to run secure and measurable promotions or campaigns. Built with Next.js and Supabase (PostgreSQL & Auth).",
+    tutorial: false,
+    image:  sozboost,
+  },
   {
     title: "User Management App - Next.js",
     tech: [html, tailwind, react, nextjs, postgresql, prisma, better_auth],
