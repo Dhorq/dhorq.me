@@ -1,50 +1,76 @@
-import { Presentation } from "lucide-react";
 import { projects } from "../data/projects";
 import useGlobalStore from "../stores/useGlobalStore";
+import { ExternalLink } from "lucide-react";
 
 const ProjectCard = () => {
   const { darkMode } = useGlobalStore();
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-10">
+    <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5">
       {projects.map((project) => (
         <a
           href={project.link}
           target="_blank"
-          rel="noopener"
+          rel="noopener noreferrer"
           key={project.title}
-          className={`w-80 lg:w-85 h-90 justify-start flex flex-col relative rounded-2xl hover:-translate-y-1 hover:opacity-80 hover:scale-105 transition-all ease-in-out duration-300 ${
-            !darkMode
-              ? "bg-white/30 text-black shadow-md"
-              : "bg-stone-900 shadow-[2px_2px_6px_rgba(255,255,255,0.3)] text-white"
+          className={`group flex flex-col rounded-2xl overflow-hidden border transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl ${
+            darkMode
+              ? "bg-zinc-900 border-zinc-800 hover:border-zinc-600 hover:shadow-white/5"
+              : "bg-white border-zinc-200 hover:border-zinc-400 hover:shadow-zinc-200/80 shadow-sm"
           }`}
         >
-          <img
-            src={project.image}
-            alt="Image"
-            className="min-h-40 max-h-40 w-full object-cover rounded-t-2xl"
-          />
-          <div className="grid grid-rows-6 content-between h-full p-2 text-sm">
-            <p className="row-span-1 font-medium">{project.title}</p>
-            <p className="row-span-4 text-xs">{project.description}</p>
-            <ul className="flex gap-1 self-end row-span-1">
-              {project.tech.map((t, j) => (
-                <li
-                  className="size-5 flex items-center justify-center text-center text-xs"
-                  key={j}
-                >
-                  <img src={t} alt="" />
-                </li>
-              ))}
-            </ul>
-          </div>
-          {/* {project.tutorial ? (
-            <div className="absolute right-1 top-1 z-100">
-              <Presentation className="size-5 text-green-500" />
+          {/* Image */}
+          <div className="relative overflow-hidden h-44 shrink-0">
+            <img
+              src={project.image}
+              alt={project.title}
+              className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+            />
+            {/* Hover overlay */}
+            <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end justify-end p-3">
+              <div className="bg-black/50 backdrop-blur-sm rounded-full p-1.5">
+                <ExternalLink className="size-4 text-white" />
+              </div>
             </div>
-          ) : (
-            ""
-          )} */}
+          </div>
+
+          {/* Content */}
+          <div
+            className={`flex flex-col flex-1 p-4 gap-3 ${
+              darkMode ? "text-zinc-300" : "text-zinc-700"
+            }`}
+          >
+            <h3
+              className={`font-semibold text-sm leading-snug ${
+                darkMode ? "text-white" : "text-zinc-900"
+              }`}
+            >
+              {project.title}
+            </h3>
+            <p
+              className={`text-xs leading-5 flex-1 ${
+                darkMode ? "text-zinc-400" : "text-zinc-500"
+              }`}
+            >
+              {project.description}
+            </p>
+
+            {/* Tech icons */}
+            <div
+              className={`flex gap-1.5 flex-wrap pt-3 mt-auto border-t ${
+                darkMode ? "border-zinc-800" : "border-zinc-100"
+              }`}
+            >
+              {project.tech.map((t, j) => (
+                <img
+                  key={j}
+                  src={t}
+                  alt=""
+                  className="size-5 object-contain"
+                />
+              ))}
+            </div>
+          </div>
         </a>
       ))}
     </div>

@@ -1,4 +1,4 @@
-import { Navigate, Route, Routes } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import About from "./pages/About";
 import useGlobalStore from "./stores/useGlobalStore";
@@ -12,24 +12,21 @@ const App = () => {
 
   return (
     <div
-      className={`${
-        darkMode
-          ? "bg-black text-white"
-          : "bg-linear-to-b from-white to-gray-300 text-black"
-      } md:pt-10 flex flex-col`}
+      className={`min-h-screen flex flex-col transition-colors duration-300 ${
+        darkMode ? "bg-[#09090b] text-white" : "bg-zinc-50 text-zinc-900"
+      }`}
     >
-      <div className="min-h-screen gap-15 flex flex-col">
-        <Navbar />
+      <Navbar />
+      <main className="flex-1 pt-16">
         <Routes>
           <Route path="/" element={<Home />} />
-
           <Route path="/about" element={<About />} />
           <Route path="/projects" element={<Projects />} />
           <Route path="/experiences" element={<About />} />
           <Route path="/educations" element={<About />} />
           <Route path="/contact" element={<Contact />} />
         </Routes>
-      </div>
+      </main>
       <Footer />
     </div>
   );

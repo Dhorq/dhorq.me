@@ -1,118 +1,132 @@
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import useGlobalStore from "../stores/useGlobalStore";
+import { Sun, Moon } from "lucide-react";
 
-import { Lightbulb, LightbulbOff } from "lucide-react";
+const navLinks = [
+  { name: "About", path: "/about", id: "about" },
+  { name: "Projects", path: "/projects", id: "projects" },
+  { name: "Contact", path: "/contact", id: "contact" },
+];
 
 const Navbar = () => {
-  // const { darkMode, toggleDarkMode } = useGlobalStore((state) => ({
-  //   darkMode: state.darkMode,
-  //   toggleDarkMode: state.toggleDarkMode,
-  // }));
+  const { setSelectedNavbar, darkMode, toggleDarkMode } = useGlobalStore();
+  const location = useLocation();
 
-  const { selectedNavbar, setSelectedNavbar } = useGlobalStore();
-
-  const darkMode = useGlobalStore((state) => state.darkMode);
-  const toggleDarkMode = useGlobalStore((state) => state.toggleDarkMode);
+  const isActive = (path) => location.pathname === path;
 
   return (
-    <div className="flex justify-center items-center">
-      <ul className="hidden md:flex gap-6 justify-center items-center">
-        <Link
-          to="/about"
-          className={`${
-            selectedNavbar === "about" ? "border-b" : ""
-          } cursor-pointer hover:font-bold hover:scale-105 transition-all ease-in duration-300`}
-          onClick={() => setSelectedNavbar("about")}
-        >
-          About
-        </Link>
-        <Link
-          to="/projects"
-          className={`${
-            selectedNavbar === "projects" ? "border-b" : ""
-          } cursor-pointer hover:font-bold hover:scale-105 transition-all ease-in-out duration-300`}
-          onClick={() => setSelectedNavbar("projects")}
-        >
-          Projects
-        </Link>
-        {/* <li
-        className={`${
-          selectedNavbar === "experiences" ? "underline" : ""
-        } cursor-pointer hover:opacity-75`}
-        onClick={() => setSelectedNavbar("experiences")}
-      >
-        Experiences
-      </li>
-      <li
-        className={`${
-          selectedNavbar === "educations" ? "underline" : ""
-        } cursor-pointer hover:opacity-75`}
-        onClick={() => setSelectedNavbar("educations")}
-      >
-        Educations
-      </li> */}
-        <Link
-          to="/contact"
-          className={`${
-            selectedNavbar === "contact" ? "border-b" : ""
-          } cursor-pointer hover:font-bold hover:scale-105 transition-all ease-in-out duration-300`}
-          onClick={() => setSelectedNavbar("contact")}
-        >
-          Contacts
-        </Link>
-        {!darkMode ? (
-          <LightbulbOff
-            onClick={toggleDarkMode}
-            className="size-4 cursor-pointer hover:opacity-75"
-          />
-        ) : (
-          <Lightbulb
-            onClick={toggleDarkMode}
-            className="size-4 cursor-pointer hover:opacity-75"
-          />
-        )}
-      </ul>
-      <div
-        className={`fixed flex items-center justify-center md:hidden bottom-5 bg-black/50 mx-2 h-12 w-90 rounded-full z-100 px-3 ${
-          darkMode ? "bg-white/50 text-black" : "bg-black text-white"
+    <>
+      {/* Fixed Top Navbar — Desktop */}
+      <nav
+        className={`fixed top-0 left-0 right-0 z-50 backdrop-blur-xl border-b transition-all duration-300 ${
+          darkMode
+            ? "bg-[#09090b]/80 border-zinc-800/60"
+            : "bg-white/80 border-zinc-200/60"
         }`}
       >
-        <div className="flex justify-between items-center text-center gap-10">
+        <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
+          {/* Logo */}
           <Link
-            to="/about"
-            className={`${selectedNavbar === "about" ? "bg-gray-300 rounded-full px-3 py-1" : ""}`}
-            onClick={() => setSelectedNavbar("about")}
+            to="/"
+            onClick={() => setSelectedNavbar(null)}
+            className={`text-xl font-black tracking-tight transition-colors duration-200 ${
+              darkMode
+                ? "text-white hover:text-zinc-300"
+                : "text-zinc-900 hover:text-zinc-600"
+            }`}
           >
-            About
+            Dhorq<span className={darkMode ? "text-zinc-400" : "text-zinc-500"}>.</span>
           </Link>
-          <Link
-            to="/projects"
-            className={`${selectedNavbar === "projects" ? "bg-gray-300 rounded-full px-3 py-1" : ""}`}
-            onClick={() => setSelectedNavbar("projects")}
-          >
-            Projects
-          </Link>
-          <Link
-            to="/contact"
-            className={`${selectedNavbar === "contact" ? "bg-gray-300 rounded-full px-3 py-1" : ""}`}
-            onClick={() => setSelectedNavbar("contact")}
-          >
-            Contacts
-          </Link>
-          {!darkMode ? (
-            <LightbulbOff
+
+          {/* Desktop Links */}
+          <ul className="hidden md:flex items-center gap-8">
+            {navLinks.map((link) => (
+              <Link
+                key={link.id}
+                to={link.path}
+                onClick={() => setSelectedNavbar(link.id)}
+                className={`relative text-sm font-medium transition-colors duration-200 pb-0.5 ${
+                  isActive(link.path)
+                    ? darkMode
+                      ? "text-white"
+                      : "text-zinc-900"
+                    : darkMode
+                    ? "text-zinc-400 hover:text-white"
+                    : "text-zinc-500 hover:text-zinc-900"
+                }`}
+              >
+                {link.name}
+                {isActive(link.path) && (
+                  <span
+                    className={`absolute -bottom-0.5 left-0 right-0 h-0.5 rounded-full ${
+                      darkMode ? "bg-zinc-400" : "bg-zinc-500"
+                    }`}
+                  />
+                )}
+              </Link>
+            ))}
+
+            {/* Theme toggle */}
+            <button
               onClick={toggleDarkMode}
-              className="size-4 cursor-pointer hover:opacity-75"
-            />
-          ) : (
-            <Lightbulb
-              onClick={toggleDarkMode}
-              className="size-4 cursor-pointer hover:opacity-75"
-            />
-          )}
+              className={`cursor-pointer p-2 rounded-full transition-all duration-200 hover:scale-110 ${
+                darkMode
+                  ? "bg-zinc-800 hover:bg-zinc-700 text-zinc-300"
+                  : "bg-zinc-100 hover:bg-zinc-200 text-zinc-600"
+              }`}
+              aria-label="Toggle theme"
+            >
+              {darkMode ? (
+                <Sun className="size-4" />
+              ) : (
+                <Moon className="size-4" />
+              )}
+            </button>
+          </ul>
+        </div>
+      </nav>
+
+      {/* Mobile Bottom Nav */}
+      <div
+        className={`fixed bottom-5 left-1/2 -translate-x-1/2 z-50 md:hidden backdrop-blur-xl rounded-full border shadow-2xl transition-all duration-300 ${
+          darkMode
+            ? "bg-zinc-900/90 border-zinc-700/50 shadow-black/50"
+            : "bg-white/95 border-zinc-200/80 shadow-zinc-300/40"
+        }`}
+      >
+        <div className="flex items-center gap-1 px-3 py-2">
+          {navLinks.map((link) => (
+            <Link
+              key={link.id}
+              to={link.path}
+              onClick={() => setSelectedNavbar(link.id)}
+              className={`px-3.5 py-1.5 rounded-full text-sm font-medium transition-all duration-200 ${
+                isActive(link.path)
+                  ? darkMode
+                    ? "bg-white text-black font-semibold"
+                    : "bg-zinc-900 text-white font-semibold"
+                  : darkMode
+                  ? "text-zinc-400 hover:text-white hover:bg-zinc-800"
+                  : "text-zinc-500 hover:text-zinc-900 hover:bg-zinc-100"
+              }`}
+            >
+              {link.name}
+            </Link>
+          ))}
+          <button
+            onClick={toggleDarkMode}
+            className={`ml-1 p-2 rounded-full transition-all duration-200 ${
+              darkMode
+                ? "text-zinc-400 hover:text-white hover:bg-zinc-800"
+                : "text-zinc-500 hover:text-zinc-900 hover:bg-zinc-100"
+            }`}
+            aria-label="Toggle theme"
+          >
+            {darkMode ? <Sun className="size-4" /> : <Moon className="size-4" />}
+          </button>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 

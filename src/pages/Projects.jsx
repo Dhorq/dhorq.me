@@ -1,14 +1,20 @@
-import { Presentation } from "lucide-react";
 import ProjectCard from "../components/ProjectCard";
+import useGlobalStore from "../stores/useGlobalStore";
 
 const Projects = () => {
+  const darkMode = useGlobalStore((state) => state.darkMode);
+
   return (
-    <div className="flex justify-center items-center flex-col gap-10">
-      <h1 className="text-2xl lg:text-3xl font-black">Projects</h1>
-      {/* <p className="text-sm lg:text-sm font-medium text-green-500 flex justify-center items-center text-center italic">
-        <Presentation className="size-4 text-green-500" />
-        &nbsp;: Coding along in a tutorial.
-      </p> */}
+    <div className="max-w-7xl mx-auto px-6 py-16 pb-28 md:pb-16">
+      {/* Header */}
+      <div className="mb-12">
+        <h1 className="text-3xl lg:text-4xl font-black mb-3">Projects</h1>
+        <div className="w-16 h-1 bg-zinc-400 rounded-full mb-4" />
+        <p className={`text-base ${darkMode ? "text-zinc-400" : "text-zinc-500"}`}>
+          A collection of things I've built, from full-stack apps to data pipelines.
+        </p>
+      </div>
+
       <ProjectCard />
     </div>
   );
