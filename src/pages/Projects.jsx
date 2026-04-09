@@ -11,7 +11,7 @@ const Projects = () => {
         <h1 className="text-3xl lg:text-4xl font-black mb-3">Projects</h1>
         <div className="w-16 h-1 bg-zinc-400 rounded-full mb-4" />
         <p className={`text-base ${darkMode ? "text-zinc-400" : "text-zinc-500"}`}>
-          A collection of things I've built, from full-stack apps to data pipelines.
+          A collection of things I've built, from full-stack apps to data project. <span className="text-red-500 text-xs">Only featured projects are displayed here, smaller projects are not shown.</span>
         </p>
       </div>
 
