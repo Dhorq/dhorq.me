@@ -18,9 +18,8 @@ const Footer = () => {
         >
           © {date}{" "}
           <span className={darkMode ? "text-zinc-300" : "text-zinc-600"}>
-            Dhorq
+            Dhorq.
           </span>
-          <span className="text-cyan-400">.</span>
         </p>
         <p
           className={`text-xs ${

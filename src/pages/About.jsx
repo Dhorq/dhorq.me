@@ -123,7 +123,7 @@ const About = () => {
           {timeline.map((item, i) => (
             <div key={i} className="relative">
               <div
-                className={`absolute -left-[25px] -translate-x-1/2 top-1.5 size-3 rounded-full ring-4 ${item.color} ${item.ring} ${item.animate ? "animate-pulse" : ""}`}
+                className={`absolute -left-6.25 -translate-x-1/2 top-1.5 size-3 rounded-full ring-4 ${item.color} ${item.ring} ${item.animate ? "animate-pulse" : ""}`}
               />
               <p
                 className={`text-xs font-medium mb-1 ${
