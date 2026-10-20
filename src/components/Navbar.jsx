@@ -1,6 +1,10 @@
+import { useEffect, useRef, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
+import { Menu, Moon, Sun, X } from "lucide-react";
+import MobileMenu from "./MobileMenu";
 import useGlobalStore from "../stores/useGlobalStore";
-import { Sun, Moon } from "lucide-react";
+import { gsap, useGSAP } from "../lib/gsap";
+import { NO_MOTION } from "../lib/anim";
 
 const navLinks = [
   { name: "About", path: "/about", id: "about" },
@@ -9,124 +13,165 @@ const navLinks = [
 ];
 
 const Navbar = () => {
-  const { setSelectedNavbar, darkMode, toggleDarkMode } = useGlobalStore();
   const location = useLocation();
+  const darkMode = useGlobalStore((state) => state.darkMode);
+  const toggleDarkMode = useGlobalStore((state) => state.toggleDarkMode);
+  const setSelectedNavbar = useGlobalStore((state) => state.setSelectedNavbar);
+  const introDone = useGlobalStore((state) => state.introDone);
+
+  const navRef = useRef(null);
+  const toggleRef = useRef(null);
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
 
   const isActive = (path) => location.pathname === path;
 
+  // Never leave the mobile panel open across a navigation (back/forward too).
+  const [lastPath, setLastPath] = useState(location.pathname);
+  if (lastPath !== location.pathname) {
+    setLastPath(location.pathname);
+    if (menuOpen) setMenuOpen(false);
+  }
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 12);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  useGSAP(
+    () => {
+      if (!introDone) return;
+
+      const mm = gsap.matchMedia();
+      mm.add(NO_MOTION, () => {
+        gsap.from("[data-nav-item]", {
+          y: -14,
+          autoAlpha: 0,
+          duration: 0.8,
+          stagger: 0.06,
+          ease: "power3.out",
+        });
+      });
+
+      return () => mm.revert();
+    },
+    { dependencies: [introDone], scope: navRef },
+  );
+
   return (
-    <>
-      {/* Fixed Top Navbar — Desktop */}
+    <header className="fixed inset-x-0 top-0 z-50">
       <nav
-        className={`fixed top-0 left-0 right-0 z-50 backdrop-blur-xl border-b transition-all duration-300 ${
-          darkMode
-            ? "bg-[#09090b]/80 border-zinc-800/60"
-            : "bg-white/80 border-zinc-200/60"
+        ref={navRef}
+        aria-label="Primary"
+        className={`border-b transition-colors duration-500 ${
+          menuOpen || !scrolled
+            ? "border-transparent bg-transparent"
+            : "border-line bg-bg/80 backdrop-blur-xl"
         }`}
       >
-        <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
-          {/* Logo */}
+        <div className="mx-auto flex h-16 max-w-[1400px] items-center justify-between px-6 md:px-10">
           <Link
             to="/"
             onClick={() => setSelectedNavbar(null)}
-            className={`text-xl font-black tracking-tight transition-colors duration-200 ${
-              darkMode
-                ? "text-white hover:text-zinc-300"
-                : "text-zinc-900 hover:text-zinc-600"
-            }`}
+            data-nav-item
+            className="text-lg font-extrabold tracking-[-0.03em] transition-opacity duration-300 hover:opacity-60"
           >
-            Dhorq<span className={darkMode ? "text-zinc-400" : "text-zinc-500"}>.</span>
+            Dhorq<span className="text-accent">.</span>
           </Link>
 
-          {/* Desktop Links */}
-          <ul className="hidden md:flex items-center gap-8">
+          <ul className="hidden items-center gap-8 md:flex">
             {navLinks.map((link) => (
-              <Link
-                key={link.id}
-                to={link.path}
-                onClick={() => setSelectedNavbar(link.id)}
-                className={`relative text-sm font-medium transition-colors duration-200 pb-0.5 ${
-                  isActive(link.path)
-                    ? darkMode
-                      ? "text-white"
-                      : "text-zinc-900"
-                    : darkMode
-                    ? "text-zinc-400 hover:text-white"
-                    : "text-zinc-500 hover:text-zinc-900"
-                }`}
-              >
-                {link.name}
-                {isActive(link.path) && (
+              <li key={link.id} data-nav-item>
+                <Link
+                  to={link.path}
+                  onClick={() => setSelectedNavbar(link.id)}
+                  aria-current={isActive(link.path) ? "page" : undefined}
+                  className={`group relative block text-sm font-medium transition-colors duration-300 ${
+                    isActive(link.path)
+                      ? "text-ink"
+                      : "text-muted hover:text-ink"
+                  }`}
+                >
+                  {link.name}
                   <span
-                    className={`absolute -bottom-0.5 left-0 right-0 h-0.5 rounded-full ${
-                      darkMode ? "bg-zinc-400" : "bg-zinc-500"
+                    aria-hidden="true"
+                    className={`absolute -bottom-1.5 left-0 h-px w-full origin-left bg-accent transition-transform duration-[450ms] ${
+                      isActive(link.path)
+                        ? "scale-x-100"
+                        : "scale-x-0 group-hover:scale-x-100"
                     }`}
                   />
-                )}
-              </Link>
+                </Link>
+              </li>
             ))}
+          </ul>
 
-            {/* Theme toggle */}
+          <div className="flex items-center gap-2 md:gap-3">
             <button
+              type="button"
               onClick={toggleDarkMode}
-              className={`cursor-pointer p-2 rounded-full transition-all duration-200 hover:scale-110 ${
-                darkMode
-                  ? "bg-zinc-800 hover:bg-zinc-700 text-zinc-300"
-                  : "bg-zinc-100 hover:bg-zinc-200 text-zinc-600"
-              }`}
-              aria-label="Toggle theme"
+              data-nav-item
+              aria-label={`Switch to ${darkMode ? "light" : "dark"} theme`}
+              className="hidden size-10 cursor-pointer items-center justify-center text-muted transition-colors duration-300 hover:text-ink md:flex"
             >
               {darkMode ? (
-                <Sun className="size-4" />
+                <Sun aria-hidden="true" className="size-4" />
               ) : (
-                <Moon className="size-4" />
+                <Moon aria-hidden="true" className="size-4" />
               )}
             </button>
-          </ul>
+
+            <Link
+              to="/contact"
+              onClick={() => setSelectedNavbar("contact")}
+              data-nav-item
+              className="btn btn-outline hidden !min-h-10 !px-5 !py-2 text-xs md:inline-flex"
+            >
+              Let&rsquo;s talk
+            </Link>
+
+            <button
+              ref={toggleRef}
+              type="button"
+              onClick={() => setMenuOpen((open) => !open)}
+              data-nav-item
+              aria-expanded={menuOpen}
+              aria-controls="mobile-menu"
+              aria-label={menuOpen ? "Close menu" : "Open menu"}
+              className="flex size-10 cursor-pointer items-center justify-center md:hidden"
+            >
+              <Menu
+                aria-hidden="true"
+                className={`absolute size-5 transition-all duration-300 ${
+                  menuOpen ? "rotate-90 opacity-0" : "rotate-0 opacity-100"
+                }`}
+              />
+              <X
+                aria-hidden="true"
+                className={`absolute size-5 transition-all duration-300 ${
+                  menuOpen ? "rotate-0 opacity-100" : "-rotate-90 opacity-0"
+                }`}
+              />
+            </button>
+          </div>
         </div>
       </nav>
 
-      {/* Mobile Bottom Nav */}
-      <div
-        className={`fixed bottom-5 left-1/2 -translate-x-1/2 z-50 md:hidden backdrop-blur-xl rounded-full border shadow-2xl transition-all duration-300 ${
-          darkMode
-            ? "bg-zinc-900/90 border-zinc-700/50 shadow-black/50"
-            : "bg-white/95 border-zinc-200/80 shadow-zinc-300/40"
-        }`}
-      >
-        <div className="flex items-center gap-1 px-3 py-2">
-          {navLinks.map((link) => (
-            <Link
-              key={link.id}
-              to={link.path}
-              onClick={() => setSelectedNavbar(link.id)}
-              className={`px-3.5 py-1.5 rounded-full text-sm font-medium transition-all duration-200 ${
-                isActive(link.path)
-                  ? darkMode
-                    ? "bg-white text-black font-semibold"
-                    : "bg-zinc-900 text-white font-semibold"
-                  : darkMode
-                  ? "text-zinc-400 hover:text-white hover:bg-zinc-800"
-                  : "text-zinc-500 hover:text-zinc-900 hover:bg-zinc-100"
-              }`}
-            >
-              {link.name}
-            </Link>
-          ))}
-          <button
-            onClick={toggleDarkMode}
-            className={`ml-1 p-2 rounded-full transition-all duration-200 ${
-              darkMode
-                ? "text-zinc-400 hover:text-white hover:bg-zinc-800"
-                : "text-zinc-500 hover:text-zinc-900 hover:bg-zinc-100"
-            }`}
-            aria-label="Toggle theme"
-          >
-            {darkMode ? <Sun className="size-4" /> : <Moon className="size-4" />}
-          </button>
-        </div>
-      </div>
-    </>
+      {menuOpen && (
+        <MobileMenu
+          links={navLinks}
+          darkMode={darkMode}
+          onToggleTheme={toggleDarkMode}
+          onSelect={setSelectedNavbar}
+          onClose={() => {
+            setMenuOpen(false);
+            toggleRef.current?.focus();
+          }}
+        />
+      )}
+    </header>
   );
 };
 

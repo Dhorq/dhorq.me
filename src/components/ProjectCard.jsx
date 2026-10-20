@@ -1,6 +1,4 @@
-import { projects } from "../data/projects";
-import useGlobalStore from "../stores/useGlobalStore";
-import {  Github, Globe } from "lucide-react";
+import { ArrowUpRight } from "lucide-react";
 
 const normalizeUrl = (url) => {
   if (!url || typeof url !== "string") return "";
@@ -9,123 +7,111 @@ const normalizeUrl = (url) => {
   return /^https?:\/\//i.test(trimmed) ? trimmed : `https://${trimmed}`;
 };
 
-const ProjectCard = () => {
-  const { darkMode } = useGlobalStore();
+/**
+ * Editorial project card. The preview links to the live site when one exists and
+ * falls back to the repository, and the link row only renders destinations that
+ * are actually available — no dead controls.
+ */
+const ProjectCard = ({ project, featured = false }) => {
+  const githubUrl = normalizeUrl(project.link);
+  const websiteUrl = normalizeUrl(project.website);
+  const hasWebsite = Boolean(websiteUrl);
+  const primaryUrl = hasWebsite ? websiteUrl : githubUrl;
+  const primaryLabel = hasWebsite ? `Visit ${project.title}` : `View ${project.title} on GitHub`;
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5">
-      {projects.map((project) => {
-        const githubUrl = normalizeUrl(project.link);
-        const websiteUrl = normalizeUrl(project.website);
-        const hasWebsite = Boolean(websiteUrl);
+    <article
+      data-reveal
+      className={`group ${
+        featured
+          ? "md:grid md:grid-cols-12 md:items-center md:gap-10 lg:gap-14"
+          : "flex flex-col"
+      }`}
+    >
+      <a
+        href={primaryUrl}
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label={primaryLabel}
+        tabIndex={-1}
+        className={`relative block overflow-hidden border border-line bg-elev ${
+          featured ? "md:col-span-7 aspect-[16/9]" : "aspect-[16/10]"
+        }`}
+      >
+        <img
+          src={project.image}
+          alt={`${project.title} preview`}
+          loading={featured ? "eager" : "lazy"}
+          decoding="async"
+          width={1600}
+          height={1000}
+          className="h-full w-full object-cover transition-transform duration-[900ms] ease-out group-hover:scale-[1.04]"
+        />
+      </a>
 
-        return (
-          <div
-            key={project.title}
-            className={`group flex flex-col rounded-2xl overflow-hidden border transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl ${
-              darkMode
-                ? "bg-zinc-900 border-zinc-800 hover:border-zinc-600 hover:shadow-white/5"
-                : "bg-white border-zinc-200 hover:border-zinc-400 hover:shadow-zinc-200/80 shadow-sm"
+      <div className={`flex flex-col ${featured ? "md:col-span-5" : ""}`}>
+        <div className="mt-6 flex items-start justify-between gap-5">
+          <h3
+            className={`font-bold tracking-[-0.02em] ${
+              featured ? "text-[clamp(1.75rem,3.6vw,2.75rem)]" : "text-xl"
             }`}
           >
-            {/* Image */}
-            <div className="relative overflow-hidden h-44 shrink-0">
-              <img
-                src={project.image}
-                alt={project.title}
-                className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-              />
-              {/* Hover overlay */}
-              <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end justify-end p-3">
-              </div>
-            </div>
+            {project.title}
+          </h3>
+          <ArrowUpRight
+            aria-hidden="true"
+            className={`mt-1 size-5 shrink-0 text-muted transition-all duration-500 group-hover:-translate-y-1 group-hover:translate-x-1 group-hover:text-accent ${
+              featured ? "size-6" : ""
+            }`}
+          />
+        </div>
 
-            {/* Content */}
-            <div
-              className={`flex flex-col flex-1 p-4 gap-3 ${
-                darkMode ? "text-zinc-300" : "text-zinc-700"
-              }`}
+        <p
+          className={`mt-3 leading-relaxed text-muted ${
+            featured ? "max-w-2xl text-base min-h-18" : "text-sm min-h-18"
+          }`}
+        >
+          {project.description}
+        </p>
+
+        <div className="mt-6 flex flex-wrap items-center gap-x-6 gap-y-4 border-t border-line pt-5">
+          <ul className="flex flex-wrap items-center gap-2" aria-hidden="true">
+            {project.tech.map((tech, i) => (
+              <li key={i} className="flex items-center gap-2">
+                <img
+                  src={tech}
+                  alt=""
+                  loading="lazy"
+                  decoding="async"
+                  className="size-5 object-contain opacity-70 transition-opacity duration-300 group-hover:opacity-100"
+                />
+              </li>
+            ))}
+          </ul>
+
+          <div className="ml-auto flex items-center gap-5">
+            <a
+              href={githubUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="link-underline text-xs font-medium tracking-wide text-muted transition-colors duration-300 hover:text-ink"
             >
-              <h3
-                className={`font-semibold text-sm leading-snug ${
-                  darkMode ? "text-white" : "text-zinc-900"
-                }`}
+              GitHub
+            </a>
+            {hasWebsite && (
+              <a
+                href={websiteUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="link-underline text-xs font-medium tracking-wide text-muted transition-colors duration-300 hover:text-ink"
               >
-                {project.title}
-              </h3>
-              <p
-                className={`text-xs leading-5 flex-1 ${
-                  darkMode ? "text-zinc-400" : "text-zinc-500"
-                }`}
-              >
-                {project.description}
-              </p>
-
-              {/* Tech icons */}
-              <div
-                className={`flex gap-1.5 flex-wrap pt-3 mt-auto border-t ${
-                  darkMode ? "border-zinc-800" : "border-zinc-100"
-                }`}
-              >
-                {project.tech.map((t, j) => (
-                  <img
-                    key={j}
-                    src={t}
-                    alt=""
-                    className="size-5 object-contain"
-                  />
-                ))}
-              </div>
-
-              <div className="flex gap-2 pt-1">
-                <a
-                  href={githubUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className={`flex-1 inline-flex items-center justify-center gap-1.5 rounded-lg border px-3 py-2 text-xs font-medium transition-colors ${
-                    darkMode
-                      ? "border-zinc-700 bg-zinc-800/80 text-zinc-200 hover:bg-zinc-700"
-                      : "border-zinc-200 bg-zinc-50 text-zinc-700 hover:bg-zinc-100"
-                  }`}
-                >
-                  <Github className="size-3.5" />
-                  GitHub
-                </a>
-
-                {hasWebsite ? (
-                  <a
-                    href={websiteUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className={`flex-1 inline-flex items-center justify-center gap-1.5 rounded-lg border px-3 py-2 text-xs font-medium transition-colors ${
-                      darkMode
-                        ? "border-zinc-700 bg-zinc-800/80 text-zinc-200 hover:bg-zinc-700"
-                        : "border-zinc-200 bg-zinc-50 text-zinc-700 hover:bg-zinc-100"
-                    }`}
-                  >
-                    <Globe className="size-3.5" />
-                    Website
-                  </a>
-                ) : (
-                  <button
-                    type="button"
-                    disabled
-                    className={`flex-1 inline-flex items-center justify-center gap-1.5 rounded-lg border px-3 py-2 text-xs font-medium cursor-not-allowed ${
-                      darkMode
-                        ? "border-zinc-800 bg-zinc-900 text-zinc-600"
-                        : "border-zinc-200 bg-zinc-100 text-zinc-400"
-                    }`}
-                  >
-                    <Globe className="size-3.5" />
-                    Website
-                  </button>
-                )}
-              </div>
-            </div>
+                Live site
+              </a>
+            )}
           </div>
-        );
-      })}
-    </div>
+        </div>
+      </div>
+    </article>
   );
 };
 

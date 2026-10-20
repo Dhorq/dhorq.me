@@ -1,188 +1,166 @@
-import useGlobalStore from "../stores/useGlobalStore";
-import { GraduationCap, Code2 } from "lucide-react";
-
-const skills = [
-  "JavaScript",
-  "TypeScript",
-  "Golang",
-  "Gin",
-  "Fiber",
-  "Docker",
-  "React.js",
-  "Next.js",
-  "Node.js",
-  "Express.js",
-  "PostgreSQL",
-  "MongoDB",
-  "Prisma",
-  "REST APIs",
-  "JWT",
-  "Bcrypt",
-  "Git",
-  "Tailwind CSS",
-  "Zod / Joi",
-  "Winston",
-];
+import { useRef } from "react";
+import portrait from "../assets/img/graduationphoto.jpg";
+import SectionHeading from "../components/SectionHeading";
+import { useReveal, useSplitReveal } from "../lib/anim";
 
 const timeline = [
   {
     period: "5th Semester – Graduation",
     title: "Data Analytics Focus",
-    color: "bg-zinc-400",
-    ring: "ring-zinc-400/20",
+    current: false,
     body: "Focused on Data Analytics with internships as a System Analyst at the Ministry of Finance (KEMENKEU) and as a Data Analyst at the House of Representatives (DPR RI).",
   },
   {
     period: "Post-graduation",
     title: "Data Engineering",
-    color: "bg-zinc-500",
-    ring: "ring-zinc-500/20",
+    current: false,
     body: "Developed a strong interest in Data Engineering and pursued it through self-directed learning, further strengthening coding abilities and technical skills through June.",
   },
   {
     period: "July 2025 – Present",
     title: "Full Stack Development",
-    color: "bg-green-400",
-    ring: "ring-green-400/30",
-    animate: true,
+    current: true,
     body: "Deliberately pursued a self-taught path as a Full Stack Developer, gaining hands-on experience with JavaScript, Golang, React, Node.js, Express, PostgreSQL, Prisma, MongoDB, TypeScript, and RESTful APIs. Currently expanding expertise in Golang.",
   },
 ];
 
+const skillGroups = [
+  { title: "Languages", items: ["JavaScript", "TypeScript", "Golang"] },
+  { title: "Frontend", items: ["React.js", "Next.js", "Tailwind CSS"] },
+  {
+    title: "Backend",
+    items: ["Node.js", "Express.js", "Gin", "Fiber", "REST APIs"],
+  },
+  { title: "Data", items: ["PostgreSQL", "MongoDB", "Prisma"] },
+  { title: "Auth & quality", items: ["JWT", "Bcrypt", "Zod / Joi", "Winston"] },
+  { title: "Tooling", items: ["Docker", "Git"] },
+];
+
 const About = () => {
-  const darkMode = useGlobalStore((state) => state.darkMode);
+  const pageRef = useRef(null);
+
+  useReveal(pageRef);
+  useSplitReveal(pageRef, { stagger: 0.07 });
 
   return (
-    <div className="max-w-3xl mx-auto px-6 py-16 pb-28 md:pb-16">
-      {/* Header */}
-      <div className="mb-12">
-        <h1 className="text-3xl lg:text-4xl font-black mb-3">About Me</h1>
-        <div
-          className={`w-16 h-1 rounded-full ${
-            darkMode ? "bg-zinc-400" : "bg-zinc-500"
-          }`}
-        />
-      </div>
+    <div
+      ref={pageRef}
+      className="mx-auto max-w-[1400px] px-6 pt-32 pb-24 md:px-10 md:pt-40 md:pb-32"
+    >
+      <SectionHeading
+        index="01"
+        label="About"
+        lines={["Building", "end to end."]}
+        className="max-w-4xl"
+      />
 
-      {/* Bio */}
-      <div
-        className={`space-y-5 text-base leading-8 mb-16 ${
-          darkMode ? "text-zinc-300" : "text-zinc-600"
-        }`}
-      >
-        <p>
-          My name is{" "}
-          <strong
-            className={`font-bold ${darkMode ? "text-white" : "text-zinc-900"}`}
-          >
-            Ridho Rifqy Muhammad
-          </strong>
-          , a recent Computer Science graduate from Bina Nusantara University
-          and full-stack developer with experience building end-to-end web{" "}
-          <span className="text-cyan-400 font-medium">
-            applications using React.js, Golang, Express.js, PostgreSQL, and
-            MongoDB.
-          </span>
-        </p>
-        <p>
-          I have a solid foundation in software engineering and application
-          development, with experience in building{" "}
-          <span className="text-cyan-400 font-medium">
-            REST APIs, implementing JWT and cookie-based
-            authentication/authorization, bcrypt password hashing, and deploying
-            applications including validation and logging.
-          </span>{" "}
-          Driven by curiosity and a growth mindset, I am eager to pursue
-          full-stack roles and continuously learn new technologies to deliver
-          meaningful solutions for users.
-        </p>
-      </div>
-
-      {/* Academic Experience */}
-      <div className="mb-16">
-        <div className="flex items-center gap-3 mb-8">
-          <div
-            className={`p-2 rounded-lg ${
-              darkMode ? "bg-white/10" : "bg-zinc-100"
-            }`}
-          >
-            <GraduationCap
-              className={`size-5 ${
-                darkMode ? "text-zinc-300" : "text-zinc-600"
-              }`}
+      <div className="mt-16 grid gap-12 md:mt-24 md:grid-cols-12 md:gap-16">
+        <div data-reveal className="md:col-span-4">
+          <div className="overflow-hidden border border-line bg-elev">
+            <img
+              src={portrait}
+              alt="Ridho Rifqy Muhammad at his Bina Nusantara University graduation"
+              loading="lazy"
+              decoding="async"
+              width={1200}
+              height={1500}
+              className="aspect-[4/5] w-full object-cover grayscale-[35%] transition-[filter] duration-700 hover:grayscale-0"
             />
           </div>
-          <h2 className="text-xl font-bold">Academic Experience</h2>
         </div>
 
-        <div
-          className={`space-y-8 border-l-2 pl-6 ml-1 ${
-            darkMode ? "border-zinc-800" : "border-zinc-200"
-          }`}
-        >
-          {timeline.map((item, i) => (
-            <div key={i} className="relative">
-              <div
-                className={`absolute -left-6.25 -translate-x-1/2 top-1.5 size-3 rounded-full ring-4 ${item.color} ${item.ring} ${item.animate ? "animate-pulse" : ""}`}
+        <div className="md:col-span-7 md:col-start-6">
+          <p
+            data-split
+            className="text-[clamp(1.3rem,2.5vw,1.85rem)] leading-[1.35] font-medium tracking-[-0.02em] text-balance"
+          >
+            My name is Ridho Rifqy Muhammad, a recent Computer Science graduate
+            from Bina Nusantara University and full-stack developer with
+            experience building end-to-end web applications using React.js,
+            Golang, Express.js, PostgreSQL, and MongoDB.
+          </p>
+
+          <p
+            data-reveal
+            className="mt-8 max-w-2xl text-base leading-relaxed text-muted"
+          >
+            I have a solid foundation in software engineering and application
+            development, with experience in building{" "}
+            <span className="text-ink">
+              REST APIs, implementing JWT and cookie-based
+              authentication/authorization, bcrypt password hashing, and
+              deploying applications including validation and logging.
+            </span>{" "}
+            Driven by curiosity and a growth mindset, I am eager to pursue
+            full-stack roles and continuously learn new technologies to deliver
+            meaningful solutions for users.
+          </p>
+        </div>
+      </div>
+
+      {/* Academic experience */}
+      <section aria-labelledby="academic-experience" className="mt-24 border-t border-line pt-12 md:mt-32 md:pt-16">
+        <h2 id="academic-experience" className="label">
+          Academic experience
+        </h2>
+
+        <ol className="mt-10 border-l border-line pl-8 md:pl-10">
+          {timeline.map((item) => (
+            <li
+              key={item.title}
+              data-reveal
+              className="relative pb-10 last:pb-0 md:pb-12"
+            >
+              <span
+                aria-hidden="true"
+                className={`absolute top-1.5 -left-[calc(2rem+4.5px)] size-2.5 rounded-full md:-left-[calc(2.5rem+4.5px)] ${
+                  item.current ? "bg-accent" : "bg-muted"
+                }`}
               />
-              <p
-                className={`text-xs font-medium mb-1 ${
-                  darkMode ? "text-zinc-500" : "text-zinc-400"
-                }`}
-              >
-                {item.period}
-              </p>
-              <h3
-                className={`font-semibold mb-2 ${
-                  darkMode ? "text-white" : "text-zinc-800"
-                }`}
-              >
+              <p className="label">{item.period}</p>
+              <h3 className="mt-2 text-lg font-bold tracking-[-0.02em] md:text-xl">
                 {item.title}
               </h3>
-              <p
-                className={`text-sm leading-7 ${
-                  darkMode ? "text-zinc-400" : "text-zinc-500"
-                }`}
-              >
+              <p className="mt-3 max-w-2xl text-sm leading-relaxed text-muted md:text-base">
                 {item.body}
               </p>
+            </li>
+          ))}
+        </ol>
+      </section>
+
+      {/* Technical skills */}
+      <section aria-labelledby="technical-skills" className="mt-24 border-t border-line pt-12 md:mt-32 md:pt-16">
+        <h2 id="technical-skills" className="label">
+          Technical skills
+        </h2>
+
+        <div className="mt-10">
+          {skillGroups.map((group) => (
+            <div
+              key={group.title}
+              data-reveal
+              className="grid grid-cols-1 gap-4 border-t border-line py-6 sm:grid-cols-[11rem_1fr] sm:gap-8 last:border-b"
+            >
+              <p className="label pt-1.5">{group.title}</p>
+              <ul className="flex flex-wrap gap-x-8 gap-y-3">
+                {group.items.map((item) => (
+                  <li
+                    key={item}
+                    className="group/skill cursor-default text-base font-medium transition-transform duration-300 hover:translate-x-1 md:text-lg"
+                  >
+                    {item}
+                    <span
+                      aria-hidden="true"
+                      className="ml-2 inline-block size-1 translate-y-[-1px] rounded-full bg-accent opacity-0 transition-opacity duration-300 group-hover/skill:opacity-100"
+                    />
+                  </li>
+                ))}
+              </ul>
             </div>
           ))}
         </div>
-      </div>
-
-      {/* Technical Skills */}
-      <div>
-        <div className="flex items-center gap-3 mb-8">
-          <div
-            className={`p-2 rounded-lg ${
-              darkMode ? "bg-white/10" : "bg-zinc-100"
-            }`}
-          >
-            <Code2
-              className={`size-5 ${
-                darkMode ? "text-zinc-300" : "text-zinc-600"
-              }`}
-            />
-          </div>
-          <h2 className="text-xl font-bold">Technical Skills</h2>
-        </div>
-
-        <div className="flex flex-wrap gap-2">
-          {skills.map((skill) => (
-            <span
-              key={skill}
-              className={`px-3 py-1.5 text-sm font-medium rounded-full border transition-all duration-200 cursor-default hover:-translate-y-0.5 ${
-                darkMode
-                  ? "bg-zinc-900 border-zinc-800 text-zinc-300 hover:border-white/50 hover:text-white"
-                  : "bg-white border-zinc-200 text-zinc-600 shadow-sm hover:border-zinc-500 hover:text-zinc-900"
-              }`}
-            >
-              {skill}
-            </span>
-          ))}
-        </div>
-      </div>
+      </section>
     </div>
   );
 };
