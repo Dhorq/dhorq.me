@@ -4,6 +4,7 @@ import { ArrowRight, ArrowUpRight } from "lucide-react";
 import { gsap, useGSAP } from "../lib/gsap";
 import { NO_MOTION } from "../lib/anim";
 import useGlobalStore from "../stores/useGlobalStore";
+import ThreeBackground from "../components/ThreeBackground";
 
 const stats = [
   { value: "20+", label: "Projects Built" },
@@ -30,8 +31,7 @@ const Hero = () => {
       mm.add(NO_MOTION, () => {
         const tl = gsap.timeline({ defaults: { ease: "power4.out" } });
 
-        tl.from("[data-hero-label]", { y: 22, autoAlpha: 0, duration: 0.7 }, 0)
-          .from("[data-hero-name]", { y: 18, autoAlpha: 0, duration: 0.7 }, 0.06)
+        tl.from("[data-hero-name]", { y: 18, autoAlpha: 0, duration: 0.7 }, 0.06)
           .from(
             "[data-hero-line] > span",
             { yPercent: 112, duration: 1.15, stagger: 0.13 },
@@ -109,6 +109,7 @@ const Hero = () => {
         data-hero-parallax
         className="relative mx-auto flex min-h-[100svh] w-full max-w-[1400px] flex-col justify-center px-6 pt-28 pb-10 md:px-10 md:pt-32 md:pb-12"
       >
+        <ThreeBackground className="z-[-1]" />
         <div className="max-w-5xl">
           {/* <p
             data-hero-label
