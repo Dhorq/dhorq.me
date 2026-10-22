@@ -198,7 +198,7 @@ const Hero = () => {
         >
           <dl data-hero-stats className="grid grid-cols-3 gap-6 sm:gap-12">
             {stats.map((stat) => (
-              <div key={stat.label} className="flex flex-col">
+              <div key={stat.label} className="flex flex-col preserve-3d backface-hidden">
                 <dt className="label order-2 mt-1.5">{stat.label}</dt>
                 <dd className="order-1 text-[clamp(1.6rem,3.4vw,2.25rem)] font-bold tracking-[-0.03em] tabular-nums">
                   {stat.value}

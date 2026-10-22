@@ -11,6 +11,7 @@ import Home from "./pages/Home";
 import Contact from "./pages/Contact";
 import useGlobalStore from "./stores/useGlobalStore";
 import { ScrollTrigger } from "./lib/gsap";
+import { usePageTransition } from "./lib/pageTransition";
 
 const App = () => {
   const location = useLocation();
@@ -28,6 +29,9 @@ const App = () => {
     const frame = window.requestAnimationFrame(() => ScrollTrigger.refresh());
     return () => window.cancelAnimationFrame(frame);
   }, [location.pathname]);
+
+  // Cross-route fade transition (skipped for reduced motion).
+  usePageTransition(introDone);
 
   return (
     <>

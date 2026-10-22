@@ -1,4 +1,6 @@
 import { ArrowUpRight } from "lucide-react";
+import { useRef } from "react";
+import { useTilt3d } from "../lib/tilt3d";
 
 const normalizeUrl = (url) => {
   if (!url || typeof url !== "string") return "";
@@ -18,11 +20,16 @@ const ProjectCard = ({ project, featured = false }) => {
   const hasWebsite = Boolean(websiteUrl);
   const primaryUrl = hasWebsite ? websiteUrl : githubUrl;
   const primaryLabel = hasWebsite ? `Visit ${project.title}` : `View ${project.title} on GitHub`;
+  const cardRef = useRef(null);
+
+  // Subtle 3D tilt on fine pointers; disabled for reduced motion / touch.
+  useTilt3d(cardRef, { maxRotation: 6, scale: 1.01 });
 
   return (
     <article
+      ref={cardRef}
       data-reveal
-      className={`group ${
+      className={`group preserve-3d backface-hidden ${
         featured
           ? "md:grid md:grid-cols-12 md:items-center md:gap-10 lg:gap-14"
           : "flex flex-col"

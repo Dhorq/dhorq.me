@@ -60,6 +60,20 @@ html.theme-light {
     outline-offset: 3px;
   }
 
+  /* 3D transform utilities for tilt and depth effects */
+  .preserve-3d {
+    transform-style: preserve-3d;
+  }
+  .perspective-800 {
+    perspective: 800px;
+  }
+  .perspective-1000 {
+    perspective: 1000px;
+  }
+  .backface-hidden {
+    backface-visibility: hidden;
+  }
+
   /* Restrained, theme-aware scrollbar */
   ::-webkit-scrollbar {
     width: 8px;

@@ -2,6 +2,8 @@ import { useRef } from "react";
 import portrait from "../assets/img/graduationphoto.jpg";
 import SectionHeading from "../components/SectionHeading";
 import { useReveal, useSplitReveal } from "../lib/anim";
+import { useTilt3d } from "../lib/tilt3d";
+import { useSectionReveal } from "../lib/pageTransition";
 
 const timeline = [
   {
@@ -38,9 +40,19 @@ const skillGroups = [
 
 const About = () => {
   const pageRef = useRef(null);
+  const portraitRef = useRef(null);
+  const academicRef = useRef(null);
+  const skillsRef = useRef(null);
 
   useReveal(pageRef);
   useSplitReveal(pageRef, { stagger: 0.07 });
+
+  // 3D tilt on the portrait (fine pointers only).
+  useTilt3d(portraitRef, { maxRotation: 5, scale: 1.015 });
+
+  // Section reveals with slight 3D depth.
+  useSectionReveal(academicRef, { start: "top 82%", depth: true });
+  useSectionReveal(skillsRef, { start: "top 82%", depth: true });
 
   return (
     <div
@@ -56,7 +68,7 @@ const About = () => {
 
       <div className="mt-16 grid gap-12 md:mt-24 md:grid-cols-12 md:gap-16">
         <div data-reveal className="md:col-span-4">
-          <div className="overflow-hidden border border-line bg-elev">
+          <div ref={portraitRef} className="overflow-visible border border-line bg-elev preserve-3d backface-hidden">
             <img
               src={portrait}
               alt="Ridho Rifqy Muhammad at his Bina Nusantara University graduation"
@@ -99,7 +111,11 @@ const About = () => {
       </div>
 
       {/* Academic experience */}
-      <section aria-labelledby="academic-experience" className="mt-24 border-t border-line pt-12 md:mt-32 md:pt-16">
+      <section
+        ref={academicRef}
+        aria-labelledby="academic-experience"
+        className="mt-24 border-t border-line pt-12 md:mt-32 md:pt-16"
+      >
         <h2 id="academic-experience" className="label">
           Academic experience
         </h2>
@@ -108,7 +124,7 @@ const About = () => {
           {timeline.map((item) => (
             <li
               key={item.title}
-              data-reveal
+              data-section-reveal
               className="relative pb-10 last:pb-0 md:pb-12"
             >
               <span
@@ -130,7 +146,11 @@ const About = () => {
       </section>
 
       {/* Technical skills */}
-      <section aria-labelledby="technical-skills" className="mt-24 border-t border-line pt-12 md:mt-32 md:pt-16">
+      <section
+        ref={skillsRef}
+        aria-labelledby="technical-skills"
+        className="mt-24 border-t border-line pt-12 md:mt-32 md:pt-16"
+      >
         <h2 id="technical-skills" className="label">
           Technical skills
         </h2>
@@ -139,8 +159,8 @@ const About = () => {
           {skillGroups.map((group) => (
             <div
               key={group.title}
-              data-reveal
-              className="grid grid-cols-1 gap-4 border-t border-line py-6 sm:grid-cols-[11rem_1fr] sm:gap-8 last:border-b"
+              data-section-reveal
+              className="preserve-3d backface-hidden grid grid-cols-1 gap-4 border-t border-line py-6 sm:grid-cols-[11rem_1fr] sm:gap-8 last:border-b"
             >
               <p className="label pt-1.5">{group.title}</p>
               <ul className="flex flex-wrap gap-x-8 gap-y-3">

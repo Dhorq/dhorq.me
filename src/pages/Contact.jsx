@@ -2,14 +2,68 @@ import { useRef } from "react";
 import { ArrowUpRight } from "lucide-react";
 import { contacts, email } from "../data/contacts";
 import { useReveal, useSplitReveal } from "../lib/anim";
+import { useTilt3d } from "../lib/tilt3d";
+import { useSectionReveal } from "../lib/pageTransition";
 
 const channels = contacts.filter((contact) => !contact.isEmail);
 
+/**
+ * Single contact channel row with a subtle 3D tilt on fine pointers.
+ */
+const ContactItem = ({ contact, index }) => {
+  const itemRef = useRef(null);
+  useTilt3d(itemRef, { maxRotation: 4, scale: 1.01 });
+
+  const external = contact.href.startsWith("http");
+
+  return (
+    <li
+      ref={itemRef}
+      data-section-reveal
+      className="border-b border-line preserve-3d backface-hidden"
+    >
+      <a
+        href={contact.href}
+        {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+        className="group flex items-center gap-5 py-6 transition-colors duration-300 hover:bg-elev md:py-7"
+      >
+        <span className="label hidden sm:block">{String(index + 1).padStart(2, "0")}</span>
+
+        <img
+          src={contact.icon}
+          alt=""
+          loading="lazy"
+          decoding="async"
+          className="size-5 shrink-0 object-contain opacity-70 transition-opacity duration-300 group-hover:opacity-100"
+        />
+
+        <span className="min-w-0 flex-1">
+          <span className="label block">
+            {contact.label} · {contact.platform}
+          </span>
+          <span className="mt-1.5 block truncate text-base font-medium md:text-lg">
+            {contact.display}
+          </span>
+        </span>
+
+        <ArrowUpRight
+          aria-hidden="true"
+          className="size-5 shrink-0 text-muted transition-all duration-500 group-hover:-translate-y-1 group-hover:translate-x-1 group-hover:text-accent"
+        />
+      </a>
+    </li>
+  );
+};
+
 const Contact = () => {
   const pageRef = useRef(null);
+  const contactListRef = useRef(null);
 
   useReveal(pageRef);
   useSplitReveal(pageRef, { stagger: 0.08 });
+
+  // Section reveal with slight 3D depth.
+  useSectionReveal(contactListRef, { start: "top 82%", depth: true });
 
   return (
     <div
@@ -43,46 +97,10 @@ const Contact = () => {
         </span>
       </a>
 
-      <ul className="mt-16 border-t border-line md:mt-20">
-        {channels.map((contact, i) => {
-          const external = contact.href.startsWith("http");
-
-          return (
-            <li key={contact.platform} data-reveal className="border-b border-line">
-              <a
-                href={contact.href}
-                {...(external
-                  ? { target: "_blank", rel: "noopener noreferrer" }
-                  : {})}
-                className="group flex items-center gap-5 py-6 transition-colors duration-300 hover:bg-elev md:py-7"
-              >
-                <span className="label hidden sm:block">{String(i + 1).padStart(2, "0")}</span>
-
-                <img
-                  src={contact.icon}
-                  alt=""
-                  loading="lazy"
-                  decoding="async"
-                  className="size-5 shrink-0 object-contain opacity-70 transition-opacity duration-300 group-hover:opacity-100"
-                />
-
-                <span className="min-w-0 flex-1">
-                  <span className="label block">
-                    {contact.label} · {contact.platform}
-                  </span>
-                  <span className="mt-1.5 block truncate text-base font-medium md:text-lg">
-                    {contact.display}
-                  </span>
-                </span>
-
-                <ArrowUpRight
-                  aria-hidden="true"
-                  className="size-5 shrink-0 text-muted transition-all duration-500 group-hover:-translate-y-1 group-hover:translate-x-1 group-hover:text-accent"
-                />
-              </a>
-            </li>
-          );
-        })}
+      <ul ref={contactListRef} className="mt-16 border-t border-line md:mt-20">
+        {channels.map((contact, i) => (
+          <ContactItem key={contact.platform} contact={contact} index={i} />
+        ))}
       </ul>
     </div>
   );
