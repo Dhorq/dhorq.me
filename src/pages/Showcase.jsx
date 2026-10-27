@@ -1,6 +1,14 @@
 import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
-import { ArrowUpRight, ArrowUp, ExternalLink, Github, MousePointerClick } from "lucide-react";
+import {
+  ArrowUpRight,
+  ArrowUp,
+  ExternalLink,
+  Github,
+  MousePointerClick,
+  RotateCw,
+  Smartphone,
+} from "lucide-react";
 import * as THREE from "three";
 import { gsap } from "../lib/gsap";
 import { projects } from "../data/projects";
@@ -677,6 +685,7 @@ const Showcase = () => {
   const panelRef = useRef(null);
   const coordsRef = useRef(null);
   const panelOpenRef = useRef(false);
+  const panelOpenedAtRef = useRef(0);
   const moveInputRef = useRef({ x: 0, y: 0 });
   const jumpInputRef = useRef(false);
 
@@ -692,13 +701,57 @@ const Showcase = () => {
       (window.matchMedia("(pointer: coarse)").matches ||
         window.matchMedia("(hover: none)").matches),
   );
+  const [worldEntered, setWorldEntered] = useState(() => !touchMode);
+  const [isPortrait, setIsPortrait] = useState(
+    () => typeof window !== "undefined" && window.innerHeight > window.innerWidth,
+  );
+  const worldEnteredRef = useRef(!touchMode);
+  const isPortraitRef = useRef(isPortrait);
+  const mobileGate = touchMode && (!worldEntered || isPortrait);
 
   const selectedProject = selectedIndex === null ? null : projects[selectedIndex];
+
+  /* ---------------- mobile orientation + entry gate ---------------- */
+  useEffect(() => {
+    let orientationTimer = 0;
+
+    const syncOrientation = () => {
+      const nextPortrait = window.innerHeight > window.innerWidth;
+      isPortraitRef.current = nextPortrait;
+      setIsPortrait(nextPortrait);
+    };
+    const onOrientationChange = () => {
+      window.clearTimeout(orientationTimer);
+      orientationTimer = window.setTimeout(syncOrientation, 120);
+    };
+
+    window.addEventListener("resize", syncOrientation);
+    window.addEventListener("orientationchange", onOrientationChange);
+    return () => {
+      window.clearTimeout(orientationTimer);
+      window.removeEventListener("resize", syncOrientation);
+      window.removeEventListener("orientationchange", onOrientationChange);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!touchMode || !worldEntered || isPortrait) {
+      moveInputRef.current = { x: 0, y: 0 };
+      jumpInputRef.current = false;
+    }
+  }, [touchMode, worldEntered, isPortrait]);
 
   /* ---------------- open / close detail ---------------- */
   const closeProject = () => {
     panelOpenRef.current = false;
     setPanelOpen(false);
+  };
+
+  // The tap that opens a block can produce a synthetic click after the panel
+  // mounts. Ignore that same click on the backdrop, or the panel closes at once.
+  const closeProjectFromBackdrop = () => {
+    if (performance.now() - panelOpenedAtRef.current < 250) return;
+    closeProject();
   };
 
   const togglePointerLock = () => {
@@ -715,6 +768,42 @@ const Showcase = () => {
       }
     } catch {
       setLockHint("Mouse lock is unavailable — drag on the world to look around.");
+    }
+  };
+
+  const enterMobileWorld = () => {
+    if (isPortrait) return;
+
+    worldEnteredRef.current = true;
+    setWorldEntered(true);
+    moveInputRef.current = { x: 0, y: 0 };
+    jumpInputRef.current = false;
+
+    const lockLandscape = () => {
+      try {
+        const request = window.screen?.orientation?.lock?.("landscape");
+        if (request && typeof request.catch === "function") request.catch(() => {});
+      } catch {
+        // Orientation locking is optional. The portrait gate still applies.
+      }
+    };
+
+    // Fullscreen lets Android browsers lock landscape. iOS rejects it, so the
+    // rotate gate remains the source of truth there.
+    const element = containerRef.current;
+    if (element?.requestFullscreen) {
+      try {
+        const fullscreen = element.requestFullscreen();
+        if (fullscreen && typeof fullscreen.then === "function") {
+          fullscreen.then(lockLandscape).catch(lockLandscape);
+        } else {
+          lockLandscape();
+        }
+      } catch {
+        lockLandscape();
+      }
+    } else {
+      lockLandscape();
     }
   };
 
@@ -1596,11 +1685,17 @@ const Showcase = () => {
     let verticalVelocity = 0;
     let grounded = true;
 
+    // Desktop plays immediately. Touch devices must rotate to landscape and
+    // explicitly enter the world before any camera or project input is accepted.
+    const isPlayable = () =>
+      !touchMode || (worldEnteredRef.current && !isPortraitRef.current);
+
     const onKeyDown = (event) => {
       const target = event.target;
       if (target instanceof HTMLElement && target.closest("input, textarea, select, [contenteditable='true']")) {
         return;
       }
+      if (!isPlayable() && event.code !== "Escape") return;
       switch (event.code) {
         case "KeyW":
         case "ArrowUp":
@@ -1691,6 +1786,7 @@ const Showcase = () => {
 
     const selectProject = (index) => {
       if (index === null) return;
+      panelOpenedAtRef.current = performance.now();
       panelOpenRef.current = true;
       setSelectedIndex(index);
       setPanelOpen(true);
@@ -1714,6 +1810,7 @@ const Showcase = () => {
     };
 
     const onPointerDown = (event) => {
+      if (!isPlayable()) return;
       if (event.button !== 0 || document.pointerLockElement === canvas) return;
       if (lookPointerId !== null) return;
       dragging = true;
@@ -1730,6 +1827,15 @@ const Showcase = () => {
     };
 
     const onPointerMove = (event) => {
+      if (!isPlayable()) {
+        if (dragging) {
+          dragging = false;
+          lookPointerId = null;
+          dragDistance = 0;
+          canvas.style.cursor = "grab";
+        }
+        return;
+      }
       if (document.pointerLockElement === canvas) return;
       setPointerFromEvent(event);
       if (!dragging || event.pointerId !== lookPointerId) return;
@@ -1744,6 +1850,11 @@ const Showcase = () => {
     };
 
     const onPointerUp = (event) => {
+      if (!isPlayable()) {
+        dragging = false;
+        lookPointerId = null;
+        return;
+      }
       if (document.pointerLockElement === canvas) {
         selectProject(pickCenter());
         return;
@@ -1764,7 +1875,7 @@ const Showcase = () => {
     };
 
     const onLockedMouseMove = (event) => {
-      if (document.pointerLockElement !== canvas) return;
+      if (!isPlayable() || document.pointerLockElement !== canvas) return;
       yaw -= event.movementX * 0.0022;
       pitch = THREE.MathUtils.clamp(pitch - event.movementY * 0.0022, -1.15, 1.15);
     };
@@ -1835,7 +1946,9 @@ const Showcase = () => {
       elapsedTime += delta;
       const elapsed = elapsedTime;
 
-      if (!panelOpenRef.current) {
+      const playable = isPlayable();
+
+      if (!panelOpenRef.current && playable) {
         const joystick = moveInputRef.current;
         const rawForward = Number(keys.forward) - Number(keys.back) - joystick.y;
         const rawRight = Number(keys.right) - Number(keys.left) + joystick.x;
@@ -1879,7 +1992,7 @@ const Showcase = () => {
       const locked = document.pointerLockElement === canvas;
       raycaster.setFromCamera(locked ? new THREE.Vector2(0, 0) : pointer, camera);
       const hits =
-        coarsePointer || panelOpenRef.current
+        coarsePointer || panelOpenRef.current || !playable
           ? []
           : raycaster.intersectObjects(raycastTargets, false);
       const nextHovered = hits.length > 0 ? hits[0].object.userData.projectIndex : -1;
@@ -1973,7 +2086,7 @@ const Showcase = () => {
       canvas.remove();
       if (canvasElRef.current === canvas) canvasElRef.current = null;
     };
-  }, []);
+  }, [touchMode]);
 
   /* ------------------------------------------------------------------ */
   /*  Fallback: no WebGL2                                                */
@@ -2031,10 +2144,14 @@ const Showcase = () => {
   return (
     <div
       ref={containerRef}
-      className="relative h-[100dvh] min-h-[560px] w-full overflow-hidden bg-[#8ec9ff] text-white"
+      className="relative h-[100dvh] min-h-[560px] w-full overflow-hidden bg-[#8ec9ff] text-white [@media(max-height:600px)]:min-h-0"
     >
       {/* HUD: title */}
-      <div className="pointer-events-none absolute left-5 top-20 z-20 max-w-[300px] md:left-10 md:top-24 [@media(max-height:520px)]:hidden">
+      <div
+        className={`pointer-events-none absolute left-5 top-20 z-20 max-w-[300px] md:left-10 md:top-24 [@media(max-height:520px)]:hidden ${
+          mobileGate ? "hidden" : ""
+        }`}
+      >
         <p className="inline-flex items-center gap-2 border border-black/30 bg-black/35 px-2 py-1 font-mono text-[0.58rem] uppercase tracking-[0.22em] text-lime-200 backdrop-blur-sm">
           <span className="size-1.5 bg-lime-300" />
           A blocky project gallery
@@ -2048,7 +2165,7 @@ const Showcase = () => {
         >
           XYZ 0 / 0 / 0
         </p>
-        {touchMode && (
+        {touchMode && worldEntered && !isPortrait && (
           <p className="mt-2 max-w-[230px] font-mono text-[0.58rem] uppercase leading-relaxed tracking-[0.14em] text-white/70 [text-shadow:0_1px_6px_rgba(0,0,0,0.9)]">
             Stick to move · drag to look · tap a block
           </p>
@@ -2056,7 +2173,11 @@ const Showcase = () => {
       </div>
 
       {/* HUD: actions */}
-      <div className="pointer-events-none absolute right-4 top-20 z-30 flex flex-col items-end gap-2 md:right-8 md:top-24">
+      <div
+        className={`pointer-events-none absolute right-4 top-20 z-30 flex flex-col items-end gap-2 md:right-8 md:top-24 ${
+          mobileGate ? "hidden" : ""
+        }`}
+      >
         {!touchMode && (
           <button
             type="button"
@@ -2117,9 +2238,9 @@ const Showcase = () => {
         </div>
       )}
 
-      {/* Mobile controls: analog stick + jump */}
-      {touchMode && (
-        <div className="pointer-events-none absolute inset-x-0 bottom-0 z-30 flex items-end justify-between px-5 pb-[calc(env(safe-area-inset-bottom)_+_2.5rem)]">
+      {/* Mobile controls: analog stick + jump (only after entering the world) */}
+      {touchMode && worldEntered && !isPortrait && (
+        <div className="pointer-events-none absolute inset-x-0 bottom-0 z-30 flex items-end justify-between pb-[calc(env(safe-area-inset-bottom)_+_2.5rem)] pl-[max(1.25rem,env(safe-area-inset-left))] pr-[max(1.25rem,env(safe-area-inset-right))]">
           <VirtualJoystick
             onChange={(x, y) => {
               moveInputRef.current.x = x;
@@ -2143,13 +2264,73 @@ const Showcase = () => {
         </div>
       )}
 
+      {/* Mobile entry / landscape gate */}
+      {mobileGate && (
+        <div className="fixed inset-0 z-40 flex items-center justify-center px-4 pb-4 pt-20 [@media(max-height:360px)]:pt-16">
+          <div className="absolute inset-0 bg-[#06121a]/80 backdrop-blur-[3px]" />
+          <div
+            role="dialog"
+            aria-label={isPortrait ? "Rotate to landscape" : "Enter the project world"}
+            className="relative max-h-[calc(100dvh-6rem)] w-full max-w-sm overflow-y-auto border-4 border-[#55524d] bg-[#1b1b1b] p-5 text-center shadow-[inset_2px_2px_0_#3d3a36,inset_-2px_-2px_0_#0a0a0a,0_24px_80px_rgba(0,0,0,0.65)] [@media(max-height:360px)]:p-4"
+          >
+            <p className="font-mono text-[0.58rem] uppercase tracking-[0.24em] text-lime-300">
+              <span className="mr-2 inline-block size-1.5 bg-lime-300 align-middle" />
+              Mobile world
+            </p>
+
+            {isPortrait ? (
+              <>
+                <div className="relative mx-auto mt-4 flex size-14 items-center justify-center border-2 border-black/60 bg-[#252525] shadow-[inset_2px_2px_0_rgba(255,255,255,0.06)]">
+                  <Smartphone className="size-7 text-lime-300" aria-hidden="true" />
+                  <RotateCw
+                    className="absolute -right-3 -top-3 size-6 bg-[#1b1b1b] p-0.5 text-amber-300"
+                    aria-hidden="true"
+                  />
+                </div>
+                <h2 className="mt-4 text-[clamp(1.35rem,6vw,1.8rem)] font-black uppercase leading-tight tracking-[-0.02em]">
+                  {worldEntered ? "Rotate back" : "Rotate your phone"}
+                </h2>
+                <p className="mx-auto mt-2 max-w-[19rem] text-sm leading-relaxed text-white/55">
+                  Putar HP-mu ke posisi <span className="text-lime-200">landscape</span> untuk{" "}
+                  {worldEntered ? "melanjutkan" : "masuk ke"} project world.
+                </p>
+                <p className="mt-3 font-mono text-[0.58rem] uppercase tracking-[0.16em] text-amber-200/75">
+                  Aktifkan auto-rotate jika layar tidak berputar
+                </p>
+              </>
+            ) : (
+              <>
+                <h2 className="mt-2 text-[clamp(1.6rem,6vw,2rem)] font-black uppercase leading-[0.95] tracking-[-0.02em] [text-shadow:2px_2px_0_rgba(0,0,0,0.6)]">
+                  Project <span className="text-lime-300">World</span>
+                </h2>
+                <p className="mx-auto mt-2 max-w-[19rem] text-sm leading-relaxed text-white/55 [@media(max-height:360px)]:hidden">
+                  {projects.length} project screens floating in a blocky gallery. Look around, walk
+                  the island, and tap a block to open it.
+                </p>
+                <button
+                  type="button"
+                  onClick={enterMobileWorld}
+                  className="mt-4 inline-flex w-full items-center justify-center gap-2 border-2 border-[#2c5a18] bg-[#5b9a35] px-5 py-3 text-sm font-bold uppercase tracking-wider text-white shadow-[inset_2px_2px_0_#88c45c,inset_-2px_-2px_0_#35661d,0_4px_0_#1f3d10] transition-colors hover:bg-[#68a93e] active:translate-y-0.5 active:shadow-[inset_2px_2px_0_#88c45c,inset_-2px_-2px_0_#35661d] [@media(max-height:360px)]:mt-2"
+                >
+                  <MousePointerClick className="size-4" aria-hidden="true" />
+                  Enter World
+                </button>
+                <p className="mt-3 font-mono text-[0.58rem] uppercase leading-relaxed tracking-[0.12em] text-white/45">
+                  Analog to move · drag to look · tap a block
+                </p>
+              </>
+            )}
+          </div>
+        </div>
+      )}
+
       {/* Detail panel */}
       {panelOpen && selectedProject && (
         <div className="fixed inset-0 z-[60] flex items-center justify-center p-4 md:p-8">
           <button
             type="button"
             aria-label="Close project details"
-            onClick={closeProject}
+            onClick={closeProjectFromBackdrop}
             className="absolute inset-0 bg-black/60"
           />
           <div
