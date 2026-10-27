@@ -2291,11 +2291,11 @@ const Showcase = () => {
                   {worldEntered ? "Rotate back" : "Rotate your phone"}
                 </h2>
                 <p className="mx-auto mt-2 max-w-[19rem] text-sm leading-relaxed text-white/55">
-                  Putar HP-mu ke posisi <span className="text-lime-200">landscape</span> untuk{" "}
-                  {worldEntered ? "melanjutkan" : "masuk ke"} project world.
+                  Rotate your phone into <span className="text-lime-200">landscape</span> to{" "}
+                  {worldEntered ? "continue" : "enter"} project world.
                 </p>
                 <p className="mt-3 font-mono text-[0.58rem] uppercase tracking-[0.16em] text-amber-200/75">
-                  Aktifkan auto-rotate jika layar tidak berputar
+                  Enable auto-rotate if the screen does not rotate
                 </p>
               </>
             ) : (
