@@ -26,6 +26,7 @@ const Navbar = () => {
   const [scrolled, setScrolled] = useState(false);
 
   const isActive = (path) => location.pathname === path;
+  const onShowcase = location.pathname === "/showcase";
 
   // Never leave the mobile panel open across a navigation (back/forward too).
   const [lastPath, setLastPath] = useState(location.pathname);
@@ -67,9 +68,11 @@ const Navbar = () => {
         ref={navRef}
         aria-label="Primary"
         className={`border-b transition-colors duration-500 ${
-          menuOpen || !scrolled
-            ? "border-transparent bg-transparent"
-            : "border-line bg-bg/80 backdrop-blur-xl"
+          onShowcase
+            ? "border-white/10 bg-[#0d1a22]/70 backdrop-blur-md"
+            : menuOpen || !scrolled
+              ? "border-transparent bg-transparent"
+              : "border-line bg-bg/80 backdrop-blur-xl"
         }`}
       >
         <div className="mx-auto flex h-16 max-w-[1400px] items-center justify-between px-6 md:px-10">
@@ -77,7 +80,9 @@ const Navbar = () => {
             to="/"
             onClick={() => setSelectedNavbar(null)}
             data-nav-item
-            className="text-lg font-extrabold tracking-[-0.03em] transition-opacity duration-300 hover:opacity-60"
+            className={`text-lg font-extrabold tracking-[-0.03em] transition-opacity duration-300 hover:opacity-60 ${
+              onShowcase ? "text-white" : ""
+            }`}
           >
             Dhorq<span className="text-accent">.</span>
           </Link>
@@ -90,9 +95,13 @@ const Navbar = () => {
                   onClick={() => setSelectedNavbar(link.id)}
                   aria-current={isActive(link.path) ? "page" : undefined}
                   className={`group relative block text-sm font-medium transition-colors duration-300 ${
-                    isActive(link.path)
-                      ? "text-ink"
-                      : "text-muted hover:text-ink"
+                    onShowcase
+                      ? isActive(link.path)
+                        ? "text-white"
+                        : "text-white/60 hover:text-white"
+                      : isActive(link.path)
+                        ? "text-ink"
+                        : "text-muted hover:text-ink"
                   }`}
                 >
                   {link.name}
@@ -115,7 +124,9 @@ const Navbar = () => {
               onClick={toggleDarkMode}
               data-nav-item
               aria-label={`Switch to ${darkMode ? "light" : "dark"} theme`}
-              className="hidden size-10 cursor-pointer items-center justify-center text-muted transition-colors duration-300 hover:text-ink md:flex"
+              className={`hidden size-10 cursor-pointer items-center justify-center transition-colors duration-300 md:flex ${
+                onShowcase ? "text-white/60 hover:text-white" : "text-muted hover:text-ink"
+              }`}
             >
               {darkMode ? (
                 <Sun aria-hidden="true" className="size-4" />
@@ -128,7 +139,9 @@ const Navbar = () => {
               to="/contact"
               onClick={() => setSelectedNavbar("contact")}
               data-nav-item
-              className="btn btn-outline hidden !min-h-10 !px-5 !py-2 text-xs md:inline-flex"
+              className={`btn btn-outline hidden !min-h-10 !px-5 !py-2 text-xs md:inline-flex ${
+                onShowcase ? "!border-white/30 !text-white hover:!bg-white/10" : ""
+              }`}
             >
               Let&rsquo;s talk
             </Link>
@@ -141,7 +154,9 @@ const Navbar = () => {
               aria-expanded={menuOpen}
               aria-controls="mobile-menu"
               aria-label={menuOpen ? "Close menu" : "Open menu"}
-              className="flex size-10 cursor-pointer items-center justify-center md:hidden"
+              className={`flex size-10 cursor-pointer items-center justify-center md:hidden ${
+                onShowcase ? "text-white" : ""
+              }`}
             >
               <Menu
                 aria-hidden="true"
