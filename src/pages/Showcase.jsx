@@ -1767,6 +1767,7 @@ const Showcase = () => {
     };
 
     const pointer = new THREE.Vector2(0, 0);
+    const centerPointer = new THREE.Vector2(0, 0);
     let dragging = false;
     let lookPointerId = null;
     let dragDistance = 0;
@@ -1864,7 +1865,8 @@ const Showcase = () => {
       lookPointerId = null;
       canvas.style.cursor = "grab";
       if (dragDistance > (event.pointerType === "touch" ? 14 : 8)) return;
-      selectProject(pickAt(event.clientX, event.clientY));
+      // Mobile players aim with the center crosshair, then tap anywhere.
+      selectProject(touchMode ? pickCenter() : pickAt(event.clientX, event.clientY));
     };
 
     const onPointerLeave = () => {
@@ -1915,7 +1917,6 @@ const Showcase = () => {
     const cameraForward = new THREE.Vector3();
     const cameraRight = new THREE.Vector3();
     const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    const coarsePointer = window.matchMedia("(pointer: coarse), (hover: none)").matches;
     let hovered = -1;
     let rafId = 0;
     let lastTime = performance.now();
@@ -1990,9 +1991,12 @@ const Showcase = () => {
       camera.rotation.set(pitch, yaw, 0);
 
       const locked = document.pointerLockElement === canvas;
-      raycaster.setFromCamera(locked ? new THREE.Vector2(0, 0) : pointer, camera);
+      // Touch plays like Minecraft: the block under the center crosshair is
+      // the active target, regardless of where the finger lands.
+      const aimCenter = locked || (touchMode && playable);
+      raycaster.setFromCamera(aimCenter ? centerPointer : pointer, camera);
       const hits =
-        coarsePointer || panelOpenRef.current || !playable
+        panelOpenRef.current || !playable
           ? []
           : raycaster.intersectObjects(raycastTargets, false);
       const nextHovered = hits.length > 0 ? hits[0].object.userData.projectIndex : -1;
@@ -2167,7 +2171,7 @@ const Showcase = () => {
         </p>
         {touchMode && worldEntered && !isPortrait && (
           <p className="mt-2 max-w-[230px] font-mono text-[0.58rem] uppercase leading-relaxed tracking-[0.14em] text-white/70 [text-shadow:0_1px_6px_rgba(0,0,0,0.9)]">
-            Stick to move · drag to look · tap a block
+            Stick to move · drag to aim · tap to open
           </p>
         )}
       </div>
@@ -2196,16 +2200,29 @@ const Showcase = () => {
         </Link>
       </div>
 
-      {/* HUD: crosshair */}
+      {/* HUD: crosshair (desktop pointer lock) */}
       {pointerLocked && (
         <div className="pointer-events-none absolute inset-0 z-20 flex items-center justify-center">
-          <div className="relative h-5 w-5 drop-shadow-[0_1px_1px_rgba(0,0,0,0.9)]">
-            <span className="absolute left-1/2 top-0 h-1.5 w-[2px] -translate-x-1/2 bg-white" />
-            <span className="absolute bottom-0 left-1/2 h-1.5 w-[2px] -translate-x-1/2 bg-white" />
-            <span className="absolute left-0 top-1/2 h-[2px] w-1.5 -translate-y-1/2 bg-white" />
-            <span className="absolute right-0 top-1/2 h-[2px] w-1.5 -translate-y-1/2 bg-white" />
-            <span className="absolute left-1/2 top-1/2 size-1 -translate-x-1/2 -translate-y-1/2 bg-white" />
+          <Crosshair />
+        </div>
+      )}
+
+      {/* HUD: crosshair + target (mobile) */}
+      {touchMode && worldEntered && !isPortrait && (
+        <div className="pointer-events-none absolute inset-0 z-20">
+          <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
+            <Crosshair active={hoveredIndex !== null} />
           </div>
+          {hoveredIndex !== null && (
+            <div className="absolute left-1/2 top-[calc(50%+1.75rem)] w-max max-w-[80vw] -translate-x-1/2 border border-white/20 bg-black/55 px-2.5 py-1 text-center font-mono uppercase tracking-[0.14em] text-lime-200 shadow-[0_2px_8px_rgba(0,0,0,0.4)] backdrop-blur-sm">
+              <span className="block truncate text-[0.58rem]">
+                {projects[hoveredIndex].title}
+              </span>
+              <span className="mt-0.5 block text-[0.5rem] tracking-[0.2em] text-white/50">
+                Tap to open
+              </span>
+            </div>
+          )}
         </div>
       )}
 
@@ -2304,8 +2321,8 @@ const Showcase = () => {
                   Project <span className="text-lime-300">World</span>
                 </h2>
                 <p className="mx-auto mt-2 max-w-[19rem] text-sm leading-relaxed text-white/55 [@media(max-height:360px)]:hidden">
-                  {projects.length} project screens floating in a blocky gallery. Look around, walk
-                  the island, and tap a block to open it.
+                  {projects.length} project screens floating in a blocky gallery. Aim with the
+                  crosshair and tap anywhere to open one.
                 </p>
                 <button
                   type="button"
@@ -2316,7 +2333,7 @@ const Showcase = () => {
                   Enter World
                 </button>
                 <p className="mt-3 font-mono text-[0.58rem] uppercase leading-relaxed tracking-[0.12em] text-white/45">
-                  Analog to move · drag to look · tap a block
+                  Analog to move · drag to aim · tap to open
                 </p>
               </>
             )}
@@ -2420,6 +2437,22 @@ const Showcase = () => {
     </div>
   );
 };
+
+const Crosshair = ({ active = false }) => (
+  <div
+    aria-hidden="true"
+    data-crosshair="true"
+    className={`relative h-5 w-5 drop-shadow-[0_1px_1px_rgba(0,0,0,0.9)] transition-[color,transform] duration-150 ${
+      active ? "scale-110 text-lime-300" : "text-white"
+    }`}
+  >
+    <span className="absolute left-1/2 top-0 h-1.5 w-[2px] -translate-x-1/2 bg-current" />
+    <span className="absolute bottom-0 left-1/2 h-1.5 w-[2px] -translate-x-1/2 bg-current" />
+    <span className="absolute left-0 top-1/2 h-[2px] w-1.5 -translate-y-1/2 bg-current" />
+    <span className="absolute right-0 top-1/2 h-[2px] w-1.5 -translate-y-1/2 bg-current" />
+    <span className="absolute left-1/2 top-1/2 size-1 -translate-x-1/2 -translate-y-1/2 bg-current" />
+  </div>
+);
 
 const Kbd = ({ children }) => (
   <kbd className="mx-0.5 inline-flex min-w-[1.35rem] items-center justify-center border border-white/25 bg-white/10 px-1 py-0.5 font-mono text-[0.65rem] leading-none text-white/85 shadow-[inset_1px_1px_0_rgba(255,255,255,0.18),inset_-1px_-1px_0_rgba(0,0,0,0.4)]">
