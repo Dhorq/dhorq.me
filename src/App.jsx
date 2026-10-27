@@ -7,6 +7,7 @@ import ScrollProgress from "./components/ScrollProgress";
 import Footer from "./components/Footer";
 import About from "./pages/About";
 import Projects from "./pages/Projects";
+import Showcase from "./pages/Showcase";
 import Home from "./pages/Home";
 import Contact from "./pages/Contact";
 import useGlobalStore from "./stores/useGlobalStore";
@@ -47,6 +48,7 @@ const App = () => {
             <Route path="/" element={<Home />} />
             <Route path="/about" element={<About />} />
             <Route path="/projects" element={<Projects />} />
+            <Route path="/showcase" element={<Showcase />} />
             <Route path="/experiences" element={<About />} />
             <Route path="/educations" element={<About />} />
             <Route path="/contact" element={<Contact />} />

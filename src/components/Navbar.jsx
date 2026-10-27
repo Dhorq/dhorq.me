@@ -9,6 +9,7 @@ import { NO_MOTION } from "../lib/anim";
 const navLinks = [
   { name: "About", path: "/about", id: "about" },
   { name: "Projects", path: "/projects", id: "projects" },
+  { name: "Showcase", path: "/showcase", id: "showcase" },
   { name: "Contact", path: "/contact", id: "contact" },
 ];
 

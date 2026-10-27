@@ -19,7 +19,7 @@ import * as THREE from "three";
  *  - pointer-events-none so it never blocks UI interaction
  */
 const ThreeBackground = ({ className = "" }) => {
-  const canvasRef = useRef(null);
+  const wrapRef = useRef(null);
   const rafRef = useRef(null);
 
   const mouseRef = useRef({ x: 0, y: 0 });
@@ -36,7 +36,7 @@ const ThreeBackground = ({ className = "" }) => {
   }, []);
 
   const handleMouseMove = useCallback((event) => {
-    const rect = canvasRef.current?.getBoundingClientRect();
+    const rect = wrapRef.current?.getBoundingClientRect();
     if (!rect) return;
     mouseRef.current.x =
       ((event.clientX - rect.left) / rect.width) * 2 - 1;
@@ -45,7 +45,7 @@ const ThreeBackground = ({ className = "" }) => {
   }, []);
 
   const handleClick = useCallback((event) => {
-    const rect = canvasRef.current?.getBoundingClientRect();
+    const rect = wrapRef.current?.getBoundingClientRect();
     if (!rect) return;
     clickRef.current = {
       x: ((event.clientX - rect.left) / rect.width) * 2 - 1,
@@ -59,8 +59,15 @@ const ThreeBackground = ({ className = "" }) => {
   }, []);
 
   useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
+    const wrap = wrapRef.current;
+    if (!wrap) return;
+
+    // A fresh canvas per mount keeps React StrictMode's double effect from
+    // reusing a canvas that already owns a WebGL context.
+    const canvas = document.createElement("canvas");
+    canvas.className = "absolute inset-0 block h-full w-full";
+    canvas.style.background = "transparent";
+    wrap.prepend(canvas);
 
     // Declared at effect scope so animate() can access them.
     let scene, camera, renderer, core, layers, lineGeometries, lineMaterial,
@@ -68,8 +75,9 @@ const ThreeBackground = ({ className = "" }) => {
     let coreTarget, accent, ink, buildLineGeometry;
     let burstCount, burstPositions, burstVelocities, burstLife;
 
-    // Defensive: bail out if canvas has no size yet.
-    if (canvas.clientWidth === 0 || canvas.clientHeight === 0) {
+    // Defensive: bail out if the wrapper has no size yet.
+    if (wrap.clientWidth === 0 || wrap.clientHeight === 0) {
+      canvas.remove();
       return;
     }
 
@@ -93,7 +101,6 @@ const ThreeBackground = ({ className = "" }) => {
       try {
         renderer = new THREE.WebGLRenderer({
           canvas,
-          webgl2: false,
           alpha: true,
           antialias: true,
           powerPreference: "high-performance",
@@ -471,6 +478,7 @@ const ThreeBackground = ({ className = "" }) => {
       canvas.removeEventListener("webglcontextlost", onContextLost);
       canvas.removeEventListener("webglcontextrestored", onContextRestored);
       window.removeEventListener("resize", handleResize);
+      canvas.remove();
 
       if (!renderer || !scene) return;
 
@@ -488,14 +496,15 @@ const ThreeBackground = ({ className = "" }) => {
       burstMaterial?.dispose();
       scene?.remove(burstPoints);
       renderer.dispose();
+      renderer.forceContextLoss();
     };
   }, [getCssColor, reducedMotion, handleMouseMove, handleClick]);
 
   return (
-    <canvas
-      ref={canvasRef}
-      className={`absolute inset-0 w-full h-full pointer-events-none z-[-1] bg-transparent ${className}`}
-      style={{ background: "transparent" }}
+    <div
+      ref={wrapRef}
+      aria-hidden="true"
+      className={`absolute inset-0 h-full w-full pointer-events-none z-[-1] bg-transparent ${className}`}
     />
   );
 };
